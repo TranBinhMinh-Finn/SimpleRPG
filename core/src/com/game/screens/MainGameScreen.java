@@ -4,17 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.game.SimpleRPG;
-import com.game.entity.Player;
+import com.game.entity.*;
+
 public class MainGameScreen implements Screen {
 
 	SimpleRPG game;
 	Player danchoi1;
 	Player danchoi2;
+	Big_Demon quai1;
 	public MainGameScreen(SimpleRPG game)
 	{
 		this.game = game;
 		danchoi1 = new Player(game,0,0);
 		danchoi2 = new Player(game,Player.CHAR_WIDTH*Player.scale,Player.CHAR_HEIGHT*Player.scale);
+		quai1 = new Big_Demon(game,800,600);
 	}
 	
 	@Override
@@ -25,11 +28,13 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.5f, 0.2f, 0f, 1);
+		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		float del = Gdx.graphics.getDeltaTime();
 		danchoi1.inputQuery(del);
 		danchoi2.inputQuery(del);
+		quai1.actionQuery(del);
+		
 	}
 
 	@Override

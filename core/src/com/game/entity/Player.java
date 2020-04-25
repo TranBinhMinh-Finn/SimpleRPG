@@ -87,7 +87,7 @@ public class Player extends Entity {
 			render(del,idle,idleFrames);
 		
 	}
-	public void render(float del, Animation<TextureRegion>[] anim,int animFrames)
+	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
 		
 		game.batch.begin();
