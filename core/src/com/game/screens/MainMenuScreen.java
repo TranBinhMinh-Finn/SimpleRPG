@@ -11,8 +11,10 @@ public class MainMenuScreen implements Screen {
 
 	private static final int BUTTON_WIDTH = 1036/5;
 	private static final int BUTTON_HEIGHT = 512/5;
-	public static final int EXIT_BUTTON_X = 100;
-	public static final int EXIT_BUTTON_Y = 100;
+	public static final int START_BUTTON_X = SimpleRPG.WIDTH/2 - BUTTON_WIDTH/2;;
+	public static final int START_BUTTON_Y = SimpleRPG.HEIGHT/2 - BUTTON_HEIGHT/2+100;
+	public static final int EXIT_BUTTON_X = SimpleRPG.WIDTH/2 - BUTTON_WIDTH/2;;
+	public static final int EXIT_BUTTON_Y = SimpleRPG.HEIGHT/2 - BUTTON_HEIGHT/2-100;
 	SimpleRPG game;
 	
 	Texture playButtonActive;
@@ -39,8 +41,8 @@ public class MainMenuScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.begin();
 		int x = SimpleRPG.WIDTH/2 - BUTTON_WIDTH/2;
-		int y_exit = 75;
-		int y_start = 275;
+		int y_exit = EXIT_BUTTON_Y;
+		int y_start = START_BUTTON_Y;
 		//game.batch.draw(playButtonActive,100,400,BUTTON_WIDTH,BUTTON_HEIGHT);
 		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && SimpleRPG.HEIGHT - Gdx.input.getY() < y_exit + BUTTON_HEIGHT && SimpleRPG.HEIGHT - Gdx.input.getY()> y_exit)
 		{

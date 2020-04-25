@@ -7,8 +7,8 @@ import com.game.screens.MainMenuScreen;
 public class SimpleRPG extends Game {
 	public SpriteBatch batch;
 	
-	public static final int WIDTH = 720;
-	public static final int HEIGHT = 480;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 	
 	@Override
 	public void create () {
