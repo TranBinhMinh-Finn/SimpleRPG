@@ -8,12 +8,12 @@ public class Bullet {
 	public static final int SPEED = 500;
 	public static final int DEFAULT_Y = 40;
 	private static Texture texture;
-	int x , y;
+	float x , y;
 	public boolean remove = false;
 	
-	public Bullet(int x , int y) {
+	public Bullet(float x , float y) {
 		this.x = x;
-		this.y = DEFAULT_Y;
+		this.y = y;
 		if(texture == null) texture = new Texture("bullet.png");
 	}
 	

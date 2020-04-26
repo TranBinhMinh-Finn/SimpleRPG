@@ -20,12 +20,10 @@ public class Player extends Entity {
 	Animation<TextureRegion>[] run;
 	Animation<TextureRegion>[] idle;
 	int runFrames, idleFrames;
-	int x;
-	int y;
 	float stateTime;
 	boolean flip = false;
-	public Player(SimpleRPG game,int x,int y) {
-		super();
+	public Player(SimpleRPG game,float x,float y) {
+		super(x,y);
 		this.game = game;
 		stateTime = 0;
 		// starts at center of the screen
