@@ -1,18 +1,24 @@
 package com.game.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.game.SimpleRPG;
+import com.game.entity.Bullet;
 import com.game.entity.Player;
 public class MainGameScreen implements Screen {
 
 	SimpleRPG game;
 	Player danchoi1;
 	Player danchoi2;
+	
+	ArrayList<Bullet> bullets;
 	public MainGameScreen(SimpleRPG game)
 	{
 		this.game = game;
+		bullets = new ArrayList<Bullet>();
 		danchoi1 = new Player(game,0,0);
 		danchoi2 = new Player(game,Player.CHAR_WIDTH*Player.scale,Player.CHAR_HEIGHT*Player.scale);
 	}
@@ -25,11 +31,31 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		float del = Gdx.graphics.getDeltaTime();
 		Gdx.gl.glClearColor(0.5f, 0.2f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		float del = Gdx.graphics.getDeltaTime();
-		danchoi1.inputQuery(del);
-		danchoi2.inputQuery(del);
+		
+		// bullet testing ...
+		
+		ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
+		for(Bullet i : bullets) {
+			i.update(del);
+			if(i.remove == true) {
+				bulletsToRemove.add(i);
+			}
+		}
+		bullets.removeAll(bulletsToRemove);
+		// entity behavior code 
+		game.batch.begin();
+		
+		for(Bullet i : bullets) {
+			i.render(game.batch);
+		}
+		danchoi1.inputQuery(del , bullets);
+		danchoi2.inputQuery(del , bullets);
+		
+		game.batch.end();
+		
 	}
 
 	@Override

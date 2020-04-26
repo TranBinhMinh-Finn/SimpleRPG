@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
@@ -47,9 +49,12 @@ public class Player extends Entity {
 		
 		
 	}
-	public void inputQuery(float del)
+	public void inputQuery(float del, ArrayList<Bullet> bullets)
 	{
 		boolean pressedKey = false;
+		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
+			bullets.add(new Bullet(x , y));
+		}
 		if(Gdx.input.isKeyPressed(Keys.UP))
 		{
 			pressedKey = true;
@@ -89,14 +94,8 @@ public class Player extends Entity {
 	}
 	public void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
-		
-		game.batch.begin();
-		
-		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
-		
-		game.batch.end();
-		
-		
+		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,
+														CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
 	}
 	
 }
