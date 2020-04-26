@@ -3,6 +3,7 @@ package com.game.entity;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -47,11 +48,10 @@ public class Player extends Entity {
 	public void inputQuery(float del, ArrayList<Bullet> bullets)
 	{
 		boolean pressedKey = false;
-		if(Gdx.input.isTouched()) {
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			
 			bullets.add(new Bullet(position.x , position.y , Gdx.input.getX(), Gdx.input.getY()));
-			System.out.println(position.x + " " + position.y);
-			System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
+			
 		}
 		if(Gdx.input.isKeyPressed(Keys.UP))
 		{

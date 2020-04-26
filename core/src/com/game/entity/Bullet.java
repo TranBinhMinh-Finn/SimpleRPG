@@ -15,13 +15,13 @@ public class Bullet extends Entity{
 		super(x,y);
 		remove = false;
 		if(texture == null) texture = new Texture("bullet.png");
-		speedVector = new Vector2(tx-x , ty-y);
-		distance = position.dst(speedVector);
+		speedVector = new Vector2(tx - x , ty - y);
+		distance = speedVector.dst(new Vector2(0,0));
 		speedVector.x /= distance;
 		speedVector.y /= distance;
 	}
 	
-	public void update(float deltaTime ) {
+	public void update(float deltaTime ) { 
 		position.x +=deltaTime * speedVector.x * SPEED;
 		position.y +=deltaTime * speedVector.y * SPEED;
 		if(position.y > Gdx.graphics.getHeight()) remove = true;
