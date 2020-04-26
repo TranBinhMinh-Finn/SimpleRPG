@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.game.SimpleRPG;
-import com.game.screens.MainGameScreen;
 
 public class Player extends Entity {
 	SimpleRPG game ;
@@ -29,8 +28,6 @@ public class Player extends Entity {
 		// starts at center of the screen
 		//y = SimpleRPG.HEIGHT/2 - CHAR_HEIGHT/2;
 		//x = SimpleRPG.WIDTH/2  - CHAR_WIDTH/2;
-		this.x = x;
-		this.y = y;
 		
 		//importing idle animation
 		idleFrames = 6;
@@ -50,38 +47,41 @@ public class Player extends Entity {
 	public void inputQuery(float del, ArrayList<Bullet> bullets)
 	{
 		boolean pressedKey = false;
-		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-			bullets.add(new Bullet(x , y));
+		if(Gdx.input.isTouched()) {
+			
+			bullets.add(new Bullet(position.x , position.y , Gdx.input.getX(), Gdx.input.getY()));
+			System.out.println(position.x + " " + position.y);
+			System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
 		}
 		if(Gdx.input.isKeyPressed(Keys.UP))
 		{
 			pressedKey = true;
-			y += SPEED*del;
-			if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
-				y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+			position.y += SPEED*del;
+			if(position.y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
+				position.y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN))
 		{
 			pressedKey = true;
-			y -= SPEED*del;
-			if(y<0)
-				y=0;
+			position.y -= SPEED*del;
+			if(position.y<0)
+				position.y=0;
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT))
 		{
 			flip = false;
 			pressedKey = true;
-			x += SPEED*del;
-			if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
-				x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
+			position.x += SPEED*del;
+			if(position.x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
+				position.x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
 		}
 		if(Gdx.input.isKeyPressed(Keys.LEFT))
 		{
 			pressedKey = true;
 			flip = true;
-			x -= SPEED*del;
-			if(x<0)
-				x=0;
+			position.x -= SPEED*del;
+			if(position.x<0)
+				position.x=0;
 		}
 		stateTime +=  del*5;
 		if(pressedKey)
@@ -92,7 +92,7 @@ public class Player extends Entity {
 	}
 	public void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
-		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,
+		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?position.x+CHAR_WIDTH*scale:position.x, position.y,0,0,
 														CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
 	}
 	

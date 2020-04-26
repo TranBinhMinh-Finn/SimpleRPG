@@ -12,7 +12,6 @@ public class MainGameScreen implements Screen {
 
 	SimpleRPG game;
 	Player danchoi1;
-	Player danchoi2;
 	
 	ArrayList<Bullet> bullets;
 	public MainGameScreen(SimpleRPG game)
@@ -20,7 +19,6 @@ public class MainGameScreen implements Screen {
 		this.game = game;
 		bullets = new ArrayList<Bullet>();
 		danchoi1 = new Player(game,0,0);
-		danchoi2 = new Player(game,Player.CHAR_WIDTH*Player.scale,Player.CHAR_HEIGHT*Player.scale);
 	}
 	
 	@Override
@@ -52,7 +50,6 @@ public class MainGameScreen implements Screen {
 			i.render(game.batch);
 		}
 		danchoi1.inputQuery(del , bullets);
-		danchoi2.inputQuery(del , bullets);
 		
 		game.batch.end();
 		
