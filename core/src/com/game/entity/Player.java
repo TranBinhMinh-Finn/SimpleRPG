@@ -22,7 +22,7 @@ public class Player extends Entity {
 	int runFrames, idleFrames;
 	float stateTime;
 	boolean flip = false;
-	public Player(SimpleRPG game,float x,float y) {
+	public Player(SimpleRPG game,int x,int y) {
 		super(x,y);
 		this.game = game;
 		stateTime = 0;
@@ -47,42 +47,45 @@ public class Player extends Entity {
 	}
 	public void inputQuery(float del, ArrayList<Bullet> bullets)
 	{
-		boolean pressedKey = false;
-		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+		
+		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 			
-			bullets.add(new Bullet(position.x , position.y , Gdx.input.getX(), Gdx.input.getY()));
-			
+			bullets.add(new Bullet(x + CHAR_WIDTH*scale/2 , y + CHAR_HEIGHT*scale/2 , Gdx.input.getX(), Gdx.input.getY()));
 		}
+
+		boolean pressedKey = false;
 		if(Gdx.input.isKeyPressed(Keys.UP))
 		{
 			pressedKey = true;
-			position.y += SPEED*del;
-			if(position.y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
-				position.y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+			y += SPEED*del;
+			if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
+				y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN))
 		{
 			pressedKey = true;
-			position.y -= SPEED*del;
-			if(position.y<0)
-				position.y=0;
+			y -= SPEED*del;
+			if(y<0)
+				y=0;
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT))
 		{
 			flip = false;
 			pressedKey = true;
-			position.x += SPEED*del;
-			if(position.x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
-				position.x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
+			x += SPEED*del;
+			if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
+				x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
 		}
 		if(Gdx.input.isKeyPressed(Keys.LEFT))
 		{
 			pressedKey = true;
 			flip = true;
-			position.x -= SPEED*del;
-			if(position.x<0)
-				position.x=0;
+			x -= SPEED*del;
+			if(x<0)
+				x=0;
 		}
+		
+		
 		stateTime +=  del*5;
 		if(pressedKey)
 			render(del,run,runFrames);
@@ -92,7 +95,7 @@ public class Player extends Entity {
 	}
 	public void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
-		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?position.x+CHAR_WIDTH*scale:position.x, position.y,0,0,
+		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,
 														CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
 	}
 	

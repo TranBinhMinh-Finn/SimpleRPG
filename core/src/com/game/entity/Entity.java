@@ -5,16 +5,17 @@ import com.badlogic.gdx.math.Vector2;
 public class Entity {
 	float hp;
 	float atk;
-	Vector2 position;
-	public Entity(float x , float y) ///create invulnarable object
+	int x,y;
+	public Entity(int x , int y) ///create invulnarable object
 	{
-		position = new Vector2(x,y);
+		this.x = x;
+		this.y = y;
 		hp = -1;
 		atk = 0;
 	}
-	public Entity(float x , float y , float hp, float atk) {
-		position.x = x;
-		position.y = y;
+	public Entity(int x , int y , float hp, float atk) {
+		this.x = x;
+		this.y = y;
 		this.hp = hp;
 		this.atk = atk;
 	}

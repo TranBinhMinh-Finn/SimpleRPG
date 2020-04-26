@@ -11,22 +11,24 @@ public class Bullet extends Entity{
 	public boolean remove ;
 	float distance;
 	Vector2 speedVector;
-	public Bullet(float x , float y , float tx , float ty) {
+	public Bullet(int x , int y , int tx , int ty) {
 		super(x,y);
+		ty = Gdx.graphics.getHeight() - ty + 1;
 		remove = false;
 		if(texture == null) texture = new Texture("bullet.png");
 		speedVector = new Vector2(tx - x , ty - y);
-		distance = speedVector.dst(new Vector2(0,0));
-		speedVector.x /= distance;
-		speedVector.y /= distance;
+		speedVector.setLength(1f);
 	}
 	
 	public void update(float deltaTime ) { 
-		position.x +=deltaTime * speedVector.x * SPEED;
-		position.y +=deltaTime * speedVector.y * SPEED;
-		if(position.y > Gdx.graphics.getHeight()) remove = true;
+		x += deltaTime * speedVector.x * SPEED;
+		y += deltaTime * speedVector.y * SPEED;
+		if(y >= Gdx.graphics.getHeight()) remove = true;
+		if(x >= Gdx.graphics.getWidth()) remove = true;
+		if(y < 0) remove = true;
+		if(x < 0) remove = true;
 	}
 	public void render(SpriteBatch batch) {
-		batch.draw(texture,position.x,position.y);
+		batch.draw(texture,x,y);
 	}
 }
