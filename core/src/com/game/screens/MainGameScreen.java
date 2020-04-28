@@ -8,17 +8,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.game.SimpleRPG;
 import com.game.entity.Bullet;
 import com.game.entity.Player;
+import com.game.entity.*;
 public class MainGameScreen implements Screen {
 
 	SimpleRPG game;
 	Player danchoi1;
-	
 	ArrayList<Bullet> bullets;
+	Big_Demon quai1;
 	public MainGameScreen(SimpleRPG game)
 	{
 		this.game = game;
 		bullets = new ArrayList<Bullet>();
 		danchoi1 = new Player(game,0,0);
+		quai1 = new Big_Demon(game,800,800);
 	}
 	
 	@Override
@@ -52,6 +54,8 @@ public class MainGameScreen implements Screen {
 		danchoi1.inputQuery(del , bullets);
 		
 		game.batch.end();
+		danchoi1.inputQuery(del);
+		quai1.actionQuery(del);
 		
 	}
 

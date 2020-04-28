@@ -93,7 +93,7 @@ public class Player extends Entity {
 			render(del,idle,idleFrames);
 		
 	}
-	public void render(float del, Animation<TextureRegion>[] anim,int animFrames)
+	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
 		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,
 														CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
