@@ -24,7 +24,7 @@ public class Big_Demon extends Entity {
 	float stateTime;
 	boolean flip = false;
 	public Big_Demon(SimpleRPG game,int x, int y) {
-		super();
+		super(x,y);
 		this.x = x;
 		this.y = y;
 		stateTime = 0;
@@ -107,10 +107,10 @@ public class Big_Demon extends Entity {
 	}
 	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)
 	{
-		game.batch.begin();
+		//game.batch.begin();
 		
 		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+MOB_WIDTH*scale:x, y,0,0,MOB_WIDTH*scale,MOB_HEIGHT*scale,flip?-1:1,1,0);
 		
-		game.batch.end();
+		//game.batch.end();
 	}
 }

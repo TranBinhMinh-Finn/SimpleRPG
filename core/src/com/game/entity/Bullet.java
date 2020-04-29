@@ -29,6 +29,8 @@ public class Bullet extends Entity{
 		if(x < 0) remove = true;
 	}
 	public void render(SpriteBatch batch) {
+		
 		batch.draw(texture,x,y);
+		
 	}
 }

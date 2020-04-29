@@ -46,17 +46,19 @@ public class MainGameScreen implements Screen {
 		}
 		bullets.removeAll(bulletsToRemove);
 		// entity behavior code 
+		
 		game.batch.begin();
 		
 		for(Bullet i : bullets) {
 			i.render(game.batch);
 		}
-		danchoi1.inputQuery(del , bullets);
+		//danchoi1.inputQuery(del , bullets);
 		
-		game.batch.end();
-		danchoi1.inputQuery(del);
+		
+		danchoi1.inputQuery(del,bullets);
 		quai1.actionQuery(del);
 		
+		game.batch.end();
 	}
 
 	@Override
