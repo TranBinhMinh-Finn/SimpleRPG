@@ -6,6 +6,7 @@ public class Entity {
 	float hp;
 	float atk;
 	int x,y;
+	public Entity() {};
 	public Entity(int x , int y) ///create invulnarable object
 	{
 		this.x = x;
