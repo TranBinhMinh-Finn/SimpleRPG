@@ -54,8 +54,6 @@ public class MainGameScreen implements Screen {
 		}
 		//danchoi1.inputQuery(del , bullets);
 		
-		game.batch.end();
-		
 		danchoi1.inputQuery(del,bullets);
 		quai1.actionQuery(del);
 		game.batch.end();
