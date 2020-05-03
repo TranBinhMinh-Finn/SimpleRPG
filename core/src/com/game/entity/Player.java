@@ -49,7 +49,7 @@ public class Player extends Entity {
 	{
 		
 		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-			
+			System.out.println("Player position : " + Gdx.input.getX() + " " + (Gdx.graphics.getHeight() - Gdx.input.getY() + 1));
 			bullets.add(new Bullet(x + CHAR_WIDTH*scale/2 , y + CHAR_HEIGHT*scale/2 , Gdx.input.getX(), Gdx.input.getY()));
 		}
 
@@ -88,7 +88,7 @@ public class Player extends Entity {
 			render(del,run,runFrames);
 		else
 			render(del,idle,idleFrames);
-		System.out.println("Player position : " + this.x + " " + this.y);
+		
 		
 	}
 	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)

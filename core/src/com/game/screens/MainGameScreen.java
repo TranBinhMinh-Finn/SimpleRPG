@@ -4,18 +4,17 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.game.SimpleRPG;
 import com.game.entity.Big_Demon;
 import com.game.entity.Bullet;
 import com.game.entity.CameraStyles;
 import com.game.entity.Player;
+import com.game.entity.Room;
 public class MainGameScreen implements Screen {
 	SimpleRPG game;
 	Player danchoi1;
@@ -24,7 +23,7 @@ public class MainGameScreen implements Screen {
 	float scale = 3;
 	final float GAME_WORLD_WIDTH = scale * 1725 ; /// map width
 	final float GAME_WORLD_HEIGHT =scale * 1600; /// map height
-	
+	Room[] rooms;
 	OrthographicCamera camera;
 	Texture rec = new Texture("bullet.png");
 	public MainGameScreen(SimpleRPG game)
@@ -40,8 +39,15 @@ public class MainGameScreen implements Screen {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() , Gdx.graphics.getHeight());
 		camera.translate(camera.viewportWidth/2 , camera.viewportHeight/2);
 		
-		
-	}
+		rooms = new Room[7];
+		rooms[0] = new Room();
+		rooms[1] = new Room( 800, 4475 , 252 + 32 , 217 + 32);
+		rooms[2] = new Room(29, 1942-16,1773+32,1700+32);
+		rooms[3] = new Room(2655 ,2726-16, 1003+32 , 938+32);
+		rooms[4] = new Room( 409, 40-16, 1017+32 ,1004+32);
+		rooms[5] = new Room(2287, 67-16,1759+32 , 1740+32);
+		rooms[6] = new Room( 4830 ,760-16,288+32, 255+32);
+	};
 	
 	@Override
 	public void show() {
@@ -68,7 +74,7 @@ public class MainGameScreen implements Screen {
 		///end bullet code  
 		
 		///camera test
-		CameraStyles.lockOnTarget(camera, danchoi1.x , danchoi1.y);
+		CameraStyles.lerpToTarget(camera, danchoi1.x , danchoi1.y);
 		/// end camera test
 		
 		game.batch.begin(); /// begin here -------------------------------------
@@ -77,12 +83,36 @@ public class MainGameScreen implements Screen {
 		for(Bullet i : bullets) {
 			i.render(game.batch);
 		}
-		
+		for(int i = 1 ; i <= 6 ; ++i) {
+			if(rooms[i].inRoom(danchoi1.x , danchoi1.y)== true) {
+				System.out.println("check in room :" + i);
+				if(rooms[i].size.x <= game.WIDTH && rooms[i].size.y <= game.HEIGHT) {
+					CameraStyles.lerpToTarget(camera, rooms[i].bottomLeft.x + rooms[i].size.x/2, rooms[i].bottomLeft.y + rooms[i].size.y/2);
+				}else {
+					float py =game.HEIGHT/2;
+					float px = game.WIDTH/2;
+					float qx = rooms[i].bottomLeft.x + rooms[i].size.x - px;
+					float qy = rooms[i].bottomLeft.y + rooms[i].size.y - py;
+					px += rooms[i].bottomLeft.x;
+					py += rooms[i].bottomLeft.y;
+					if(camera.position.x < px) CameraStyles.lerpToTarget(camera,px , camera.position.y);
+					if(camera.position.x > qx) CameraStyles.lerpToTarget(camera,qx , camera.position.y);
+					if(camera.position.y < py) CameraStyles.lerpToTarget(camera,camera.position.x , py);
+					if(camera.position.y > qy) CameraStyles.lerpToTarget(camera,camera.position.x , qy);
+					
+				}
+			}
+		}
 		danchoi1.inputQuery(del,bullets);
 		quai1.actionQuery(del);
 		
 		game.batch.setProjectionMatrix(camera.combined);
-		game.batch.draw(rec , 0, 0 , 16 * scale , 16 * scale);
+		/*game.batch.draw(rec , 800, 4475 , 252 + 32 , 217 + 32); 
+		game.batch.draw(rec ,29, 1942,1773+32,1700+32);
+		game.batch.draw(rec , 2655 ,2726-16, 1003+32 , 938+32);
+		game.batch.draw(rec, 409, 40, 1017+32 ,1004+32);
+		game.batch.draw(rec, 2287, 67-16,1759+32 , 1740+32);
+		game.batch.draw(rec , 4830 ,760-16,288+32, 255+32);*/
 		game.batch.end(); /// end here ----------------------------------------------
 	}
 
@@ -117,3 +147,11 @@ public class MainGameScreen implements Screen {
 	}
 
 }
+/*
+ * room 1 : 784 4491 1036 4708
+ * room 2 : 29 1958  1802 3658
+ * room 3 : 2655 2710 3658 3648
+ * room 4 : 409 24 1426 1028 
+ * room 5 : 2287 35 4046 1775
+ * room 6 : 4830 744 5118 999
+ */
