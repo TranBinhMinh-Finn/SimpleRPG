@@ -58,31 +58,28 @@ public class Player extends Entity {
 		{
 			pressedKey = true;
 			y += SPEED*del;
-			if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
-				y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+			//if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+			
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN))
 		{
 			pressedKey = true;
 			y -= SPEED*del;
-			if(y<0)
-				y=0;
+			//if(y<0)y=0;
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT))
 		{
 			flip = false;
 			pressedKey = true;
 			x += SPEED*del;
-			if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
-				x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
+			//if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
 		}
 		if(Gdx.input.isKeyPressed(Keys.LEFT))
 		{
 			pressedKey = true;
 			flip = true;
 			x -= SPEED*del;
-			if(x<0)
-				x=0;
+			//if(x<0)x=0;
 		}
 		
 		
@@ -91,6 +88,7 @@ public class Player extends Entity {
 			render(del,run,runFrames);
 		else
 			render(del,idle,idleFrames);
+		System.out.println("Player position : " + this.x + " " + this.y);
 		
 	}
 	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)

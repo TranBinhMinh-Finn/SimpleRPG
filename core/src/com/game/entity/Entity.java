@@ -3,9 +3,9 @@ package com.game.entity;
 import com.badlogic.gdx.math.Vector2;
 
 public class Entity {
-	float hp;
-	float atk;
-	int x,y;
+	private float hp;
+	private float atk;
+	public int x,y;
 	public Entity() {};
 	public Entity(int x , int y) ///create invulnarable object
 	{
