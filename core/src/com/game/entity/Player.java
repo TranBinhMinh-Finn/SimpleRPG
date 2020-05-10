@@ -5,100 +5,74 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.World;
 import com.game.SimpleRPG;
 
-public class Player extends Entity {
+public class Player extends Mob {
 	SimpleRPG game ;
-	public static final int CHAR_WIDTH = 16;
-	public static final int CHAR_HEIGHT = 16;
+	public static final int FRAME_WIDTH = 16;
+	public static final int FRAME_HEIGHT = 16;
+	public static final int IDLE_FRAME_NUMBER = 6;
+	public static final int RUN_FRAME_NUMBER = 6;
 	public static final int scale = 4;
 	public static final float CHAR_ANIMATION_SPEED = 0.5f;
-	public static final float SPEED = 400;
-	Animation<TextureRegion>[] run;
-	Animation<TextureRegion>[] idle;
-	int runFrames, idleFrames;
+	public static final float SPEED = 50;
+	public static final int player_hp = 100;
+	public static final int player_atk = 10;
 	float stateTime;
-	boolean flip = false;
-	public Player(SimpleRPG game,int x,int y) {
-		super(x,y);
+	
+	
+	//this.importIdleAnimation("knight_idle_spritesheet.png", FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
+	//this.importRunAnimation("knight_run_spritesheet.png", FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
+
+	
+	public Player(SimpleRPG game, float x, float y, World world)
+	{
+		super(x, y, FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH - 2)*scale, (FRAME_HEIGHT - 2)*scale, world, player_hp, player_atk, SPEED, CHAR_ANIMATION_SPEED);
+		this.importIdleAnimation("knight_idle_spritesheet.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
+		this.importRunAnimation("knight_run_spritesheet.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.game = game;
-		stateTime = 0;
-		// starts at center of the screen
-		//y = SimpleRPG.HEIGHT/2 - CHAR_HEIGHT/2;
-		//x = SimpleRPG.WIDTH/2  - CHAR_WIDTH/2;
-		
-		//importing idle animation
-		idleFrames = 6;
-		idle = new Animation[idleFrames+7];
-		TextureRegion[][] idleSpriteSheet = TextureRegion.split(new Texture("knight_idle_spritesheet.png"), CHAR_WIDTH, CHAR_HEIGHT);
-		idle[idleFrames] = new Animation<TextureRegion>(CHAR_ANIMATION_SPEED, idleSpriteSheet[0]);
-		
-		//importing run animation
-		runFrames = 6;
-		run = new Animation[runFrames+7] ;
-		TextureRegion[][] runSpriteSheet = TextureRegion.split(new Texture("knight_run_spritesheet.png"), CHAR_WIDTH, CHAR_HEIGHT);
-		run[runFrames] = new Animation<TextureRegion>(CHAR_ANIMATION_SPEED, runSpriteSheet[0]);
-		
-		
-		
 	}
-	public void inputQuery(float del, ArrayList<Bullet> bullets)
+	public void inputQuery(float del,ArrayList<Bullet> bullets)
 	{
 		
 		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-			
-			bullets.add(new Bullet(x + CHAR_WIDTH*scale/2 , y + CHAR_HEIGHT*scale/2 , Gdx.input.getX(), Gdx.input.getY()));
+			bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , Gdx.input.getX(), Gdx.input.getY(), this.body.getWorld()));
 		}
 
-		boolean pressedKey = false;
+		
+		float velX = 0;
+		float velY = 0;
 		if(Gdx.input.isKeyPressed(Keys.UP))
 		{
-			pressedKey = true;
-			y += SPEED*del;
-			if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)
-				y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+			velY = 1;
 		}
 		if(Gdx.input.isKeyPressed(Keys.DOWN))
 		{
-			pressedKey = true;
-			y -= SPEED*del;
-			if(y<0)
-				y=0;
+			velY = -1;
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT))
 		{
 			flip = false;
-			pressedKey = true;
-			x += SPEED*del;
-			if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)
-				x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
+			velX = 1;
 		}
 		if(Gdx.input.isKeyPressed(Keys.LEFT))
 		{
-			pressedKey = true;
 			flip = true;
-			x -= SPEED*del;
-			if(x<0)
-				x=0;
+			velX = -1;
 		}
-		
-		
-		stateTime +=  del*5;
-		if(pressedKey)
-			render(del,run,runFrames);
-		else
-			render(del,idle,idleFrames);
+		vel = new Vector2(velX,velY);
+		vel.setLength(SPEED*del*50);
+		this.body.setLinearVelocity(vel);
 		
 	}
-	private void render(float del, Animation<TextureRegion>[] anim,int animFrames)
+	public void render(float del)
 	{
-		
-		game.batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?x+CHAR_WIDTH*scale:x, y,0,0,
-														CHAR_WIDTH*scale,CHAR_HEIGHT*scale,flip?-1:1,1,0);
-		
+		if(vel.len()!=0)
+			this.render(del,runAnimation,runFrames,game.batch);
+		else
+			this.render(del,idleAnimation,idleFrames,game.batch);
 	}
-	
 }
