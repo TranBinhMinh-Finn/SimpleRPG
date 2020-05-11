@@ -22,7 +22,7 @@ public class Big_Demon extends Mob {
 	public static final int RUN_FRAME_NUMBER = 4;
 	
 	public Big_Demon(SimpleRPG game, float x, float y, World world ) {
-		super(x, y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED);
+		super(x, y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-4)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED);
 		this.importIdleAnimation("big_demon_idle.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.importRunAnimation("big_demon_run.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.game = game;

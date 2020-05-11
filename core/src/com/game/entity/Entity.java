@@ -23,6 +23,7 @@ public class Entity {
 		bodyDef.position.set(new Vector2((x+pixelWidth/2f)/BOX2D_SCALE,(y+pixelHeight/2f)/BOX2D_SCALE) );
 		bodyDef.type = bodyType;
 		this.body = world.createBody(bodyDef);
+		this.body.setFixedRotation(true);
 		this.frameWidth = pixelWidth;
 		this.frameHeight = pixelHeight;
 		if(shapeType == "Box")
@@ -46,6 +47,7 @@ public class Entity {
 		bodyDef.position.set(new Vector2((x+pixelWidth/2f)/BOX2D_SCALE,(y+pixelHeight/2f)/BOX2D_SCALE) );
 		bodyDef.type = bodyType;
 		this.body = world.createBody(bodyDef);
+		this.body.setFixedRotation(true);
 		this.frameWidth = pixelWidth;
 		this.frameHeight = pixelHeight;
 		if(shapeType == "Box")

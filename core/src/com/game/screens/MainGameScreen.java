@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.game.SimpleRPG;
 import com.game.entity.Big_Demon;
 import com.game.entity.Bullet;
+import com.game.entity.Entity;
 import com.game.entity.Player;
 public class MainGameScreen implements Screen {
 
@@ -33,17 +34,20 @@ public class MainGameScreen implements Screen {
 	public MainGameScreen(SimpleRPG game)
 	{
 		this.game = game;
-		world = new World(new Vector2(0,0),false);
+		world = new World(new Vector2(0f,0f),false);
 		bullets = new ArrayList<Bullet>();
 		danchoi1 = new Player(game,0,0,world);
 		quai1 = new Big_Demon(game,100,100,world);
 		
-		float w = Gdx.graphics.getWidth();                                      
-		float h = Gdx.graphics.getHeight();                         
-		cam = new OrthographicCamera(w*500,h*500);
-		cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+		
+		//Setting up Box2D Debug Renderer
+		renderer = new Box2DDebugRenderer();
+		float w_ = Gdx.graphics.getWidth()/2;                                      
+		float h_ = Gdx.graphics.getHeight()/2;                         
+		cam = new OrthographicCamera(w_,h_);
+		cam.setToOrtho(false, w_ / Entity.BOX2D_SCALE, h_ / Entity.BOX2D_SCALE);
 		debugMatrix = new Matrix4(cam.combined);
-		debugMatrix.scale(100, 100, 1);
+		debugMatrix.scale(0.5f, 0.5f, 1);
 	}
 	
 	@Override
@@ -70,12 +74,10 @@ public class MainGameScreen implements Screen {
 		}
 		bullets.removeAll(bulletsToRemove);
 		// entity behavior code 
+		danchoi1.inputQuery(del,bullets);
+		//quai1.actionQuery(del);
 		
 		game.batch.begin();
-		danchoi1.inputQuery(del,bullets);
-		quai1.actionQuery(del);
-		
-		//renderer.render(world,debugMatrix);
 		world.step(timeStep, velocityIterations, positionIterations);
 		
 		for(Bullet i : bullets) {
@@ -84,10 +86,10 @@ public class MainGameScreen implements Screen {
 		danchoi1.render(del);
 		quai1.render(del);
 		
-		
-		
-		
 		game.batch.end();
+		
+		//rendering the debug Box2D world
+		//renderer.render(world,debugMatrix);
 	}
 
 	@Override
