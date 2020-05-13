@@ -10,18 +10,20 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.Constants;
 import com.game.SimpleRPG;
 import com.game.entity.Big_Demon;
 import com.game.entity.Bullet;
-import com.game.entity.Entity;
+import com.game.entity.Mob;
 import com.game.entity.Player;
+import com.game.handlers.WorldContactListener;
 public class MainGameScreen implements Screen {
 
 	SimpleRPG game;
 	World world;
-	Player danchoi1;
+	Player player;
 	ArrayList<Bullet> bullets;
-	Big_Demon quai1;
+	ArrayList<Mob> monsterList ;
 	
 	float timeStep = 1f/60f;
 	int velocityIterations = 6, positionIterations = 3;
@@ -36,16 +38,17 @@ public class MainGameScreen implements Screen {
 		this.game = game;
 		world = new World(new Vector2(0f,0f),false);
 		bullets = new ArrayList<Bullet>();
-		danchoi1 = new Player(game,0,0,world);
-		quai1 = new Big_Demon(game,100,100,world);
-		
+		player = new Player(game,0,0,world);
+		monsterList = new ArrayList<Mob>();
+		monsterList.add(new Big_Demon(game,100,100,world));
+		world.setContactListener(new WorldContactListener());
 		
 		//Setting up Box2D Debug Renderer
 		renderer = new Box2DDebugRenderer();
 		float w_ = Gdx.graphics.getWidth()/2;                                      
 		float h_ = Gdx.graphics.getHeight()/2;                         
 		cam = new OrthographicCamera(w_,h_);
-		cam.setToOrtho(false, w_ / Entity.BOX2D_SCALE, h_ / Entity.BOX2D_SCALE);
+		cam.setToOrtho(false, w_ / Constants.BOX2D_SCALE, h_ / Constants.BOX2D_SCALE);
 		debugMatrix = new Matrix4(cam.combined);
 		debugMatrix.scale(0.5f, 0.5f, 1);
 	}
@@ -66,15 +69,26 @@ public class MainGameScreen implements Screen {
 		// bullet testing ...
 		
 		ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
+		ArrayList mobsToRemove = new ArrayList<Mob>();
 		for(Bullet i : bullets) {
 			i.update(del);
 			if(i.remove == true) {
 				bulletsToRemove.add(i);
+				i.dispose();
+			}
+		}
+		for(Mob i : monsterList)
+		{
+			if(i.remove)
+			{
+				i.dispose();
+				mobsToRemove.add(i);
 			}
 		}
 		bullets.removeAll(bulletsToRemove);
+		monsterList.removeAll(mobsToRemove);
 		// entity behavior code 
-		danchoi1.inputQuery(del,bullets);
+		player.inputQuery(del,bullets);
 		//quai1.actionQuery(del);
 		
 		game.batch.begin();
@@ -83,9 +97,13 @@ public class MainGameScreen implements Screen {
 		for(Bullet i : bullets) {
 			i.render(game.batch);
 		}
-		danchoi1.render(del);
-		quai1.render(del);
+		player.render(del);
 		
+		for(Mob i : monsterList)
+		{
+			Big_Demon tmp  = (Big_Demon) i ;
+			tmp.render(del);
+		}
 		game.batch.end();
 		
 		//rendering the debug Box2D world

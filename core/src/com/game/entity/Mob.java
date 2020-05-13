@@ -20,16 +20,16 @@ public class Mob extends Entity {
 	int idleFrames;
 	float stateTime;
 	boolean flip = false;
-	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed) {
-		super(x, y, w, h, BodyType.DynamicBody, "Box", world);
+	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
+		super(x, y, w, h, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
 		vel = new Vector2(0,0);
 		this.hp = hp;
 		this.atk = atk;
 		this.speed = speed;
 		this.animation_speed = animation_speed;
 	}
-	public Mob(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed) {
-		super(x, y, w, h, box2DWidth, box2DHeight, BodyType.DynamicBody, "Box", world);
+	public Mob(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
+		super(x, y, w, h, box2DWidth, box2DHeight, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
 		vel = new Vector2(0,0);
 		this.hp = hp;
 		this.atk = atk;
@@ -54,5 +54,15 @@ public class Mob extends Entity {
 	{
 		stateTime +=  del*5;
 		batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?this.getXByPixels()+frameWidth:this.getXByPixels(), this.getYByPixels(),0,0,frameWidth,frameHeight,flip?-1:1,1,0);
+	}
+	public void contactHandle(Entity s)
+	{
+		if(s instanceof Bullet)
+		{
+			System.out.println("Hitted by bullet");
+			hp -= 10;
+			if(hp == 0)
+				remove = true;
+		}
 	}
 }

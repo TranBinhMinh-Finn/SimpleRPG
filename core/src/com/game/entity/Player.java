@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.Constants;
 import com.game.SimpleRPG;
 
 public class Player extends Mob {
@@ -30,7 +31,7 @@ public class Player extends Mob {
 	
 	public Player(SimpleRPG game, float x, float y, World world)
 	{
-		super(x, y, FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH - 4)*scale, (FRAME_HEIGHT - 3)*scale, world, player_hp, player_atk, SPEED, CHAR_ANIMATION_SPEED);
+		super(x, y, FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH - 4)*scale, (FRAME_HEIGHT - 3)*scale, world, player_hp, player_atk, SPEED, CHAR_ANIMATION_SPEED, Constants.BIT_PLAYER, Constants.BIT_ENEMY, (short)0);
 		this.importIdleAnimation("knight_idle_spritesheet.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.importRunAnimation("knight_run_spritesheet.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.game = game;
@@ -68,6 +69,7 @@ public class Player extends Mob {
 		this.body.setLinearVelocity(vel);
 		
 	}
+	
 	public void render(float del)
 	{
 		if(vel.len()!=0)
