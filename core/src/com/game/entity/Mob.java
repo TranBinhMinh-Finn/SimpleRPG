@@ -59,7 +59,7 @@ public class Mob extends Entity {
 	{
 		if(s instanceof Bullet)
 		{
-			System.out.println("Hitted by bullet");
+			//System.out.println("Hitted by bullet");
 			hp -= 10;
 			if(hp == 0)
 				remove = true;
