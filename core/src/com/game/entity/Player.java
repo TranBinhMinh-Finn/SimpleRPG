@@ -36,39 +36,7 @@ public class Player extends Mob {
 		this.importRunAnimation("knight_run_spritesheet.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.game = game;
 	}
-	public void inputQuery(float del,ArrayList<Bullet> bullets)
-	{
-		
-		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-			bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , Gdx.input.getX(), Gdx.input.getY(), this.body.getWorld()));
-		}
-
-		
-		float velX = 0;
-		float velY = 0;
-		if(Gdx.input.isKeyPressed(Keys.UP))
-		{
-			velY = 1;
-		}
-		if(Gdx.input.isKeyPressed(Keys.DOWN))
-		{
-			velY = -1;
-		}
-		if(Gdx.input.isKeyPressed(Keys.RIGHT))
-		{
-			flip = false;
-			velX = 1;
-		}
-		if(Gdx.input.isKeyPressed(Keys.LEFT))
-		{
-			flip = true;
-			velX = -1;
-		}
-		vel = new Vector2(velX,velY);
-		vel.setLength(SPEED*del*50);
-		this.body.setLinearVelocity(vel);
-		
-	}
+	
 	
 	public void render(float del)
 	{

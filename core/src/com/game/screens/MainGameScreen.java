@@ -16,6 +16,7 @@ import com.game.entity.Big_Demon;
 import com.game.entity.Bullet;
 import com.game.entity.Mob;
 import com.game.entity.Player;
+import com.game.handlers.InputHandler;
 import com.game.handlers.WorldContactListener;
 public class MainGameScreen implements Screen {
 
@@ -32,7 +33,7 @@ public class MainGameScreen implements Screen {
 	Box2DDebugRenderer renderer;
 	Matrix4 debugMatrix;
 	OrthographicCamera cam;
-	
+	InputHandler inputHandler;
 	public MainGameScreen(SimpleRPG game)
 	{
 		this.game = game;
@@ -42,6 +43,8 @@ public class MainGameScreen implements Screen {
 		monsterList = new ArrayList<Mob>();
 		monsterList.add(new Big_Demon(game,100,100,world));
 		world.setContactListener(new WorldContactListener());
+		//Setting up inputHandler
+		inputHandler = new InputHandler(player);
 		
 		//Setting up Box2D Debug Renderer
 		renderer = new Box2DDebugRenderer();
@@ -88,8 +91,8 @@ public class MainGameScreen implements Screen {
 		bullets.removeAll(bulletsToRemove);
 		monsterList.removeAll(mobsToRemove);
 		// entity behavior code 
-		player.inputQuery(del,bullets);
-		//quai1.actionQuery(del);
+		inputHandler.keyHandler(del);
+		inputHandler.mouseClickHandler(del, bullets);
 		
 		game.batch.begin();
 		world.step(timeStep, velocityIterations, positionIterations);

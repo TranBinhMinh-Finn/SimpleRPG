@@ -12,9 +12,9 @@ import com.game.Constants;
 public class Entity {
 	
 	public Body body;
-	float frameWidth;
-	float frameHeight;
-	float box2DWidth, box2DHeight;
+	protected float frameWidth;
+	protected float frameHeight;
+	protected float box2DWidth, box2DHeight;
 	public boolean remove;
 	public Entity(float x, float y, float pixelWidth, float pixelHeight, BodyType bodyType, String shapeType, World world, short cBits, short mBits, short gIndex) 
 	{

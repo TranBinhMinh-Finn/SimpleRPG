@@ -2,25 +2,22 @@ package com.game.entity;
 
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.Constants;
 import com.game.SimpleRPG;
 
 public class Big_Demon extends Mob {
 	SimpleRPG game;
-	public static final float scale = 4;
-	public static final int FRAME_HEIGHT = 36;
-	public static final int FRAME_WIDTH = 32;
-	public static final float MOB_ANIMATION_SPEED = 1f;
-	public static final float SPEED = 30;
-	public static final int MOB_hp = 200;
-	public static final int MOB_atk = 5;
-	public static final int IDLE_FRAME_NUMBER = 4;
-	public static final int RUN_FRAME_NUMBER = 4;
+	private static final float scale = 4;
+	private static final int FRAME_HEIGHT = 36;
+	private static final int FRAME_WIDTH = 32;
+	private static final float MOB_ANIMATION_SPEED = 1f;
+	private static final float SPEED = 30;
+	private static final int MOB_hp = 200;
+	private static final int MOB_atk = 5;
+	private static final int IDLE_FRAME_NUMBER = 4;
+	private static final int RUN_FRAME_NUMBER = 4;
 	
 	public Big_Demon(SimpleRPG game, float x, float y, World world ) {
 		super(x, y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-4)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED, Constants.BIT_ENEMY,(short) (Constants.BIT_BULLET | Constants.BIT_PLAYER | Constants.BIT_ENEMY), (short) 0);
@@ -31,8 +28,8 @@ public class Big_Demon extends Mob {
 
 
 	private int lastActionX = 0,lastActionY = 0, lastRepeats = 0;
-	public static final int limitActions = 100;
-	public void actionQuery(float del)
+	private static final int limitActions = 100;
+	public void randomAtionQuery(float del)
 	{
 		int moveX;
 		int moveY;

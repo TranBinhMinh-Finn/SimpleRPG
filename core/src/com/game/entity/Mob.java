@@ -19,7 +19,7 @@ public class Mob extends Entity {
 	int runFrames;
 	int idleFrames;
 	float stateTime;
-	boolean flip = false;
+	public boolean flip = false;
 	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
 		vel = new Vector2(0,0);
@@ -35,6 +35,14 @@ public class Mob extends Entity {
 		this.atk = atk;
 		this.speed = speed;
 		this.animation_speed = animation_speed;
+	}
+	
+	
+	public boolean isFlip() {
+		return flip;
+	}
+	public void setFlip(boolean flip) {
+		this.flip = flip;
 	}
 	void importIdleAnimation(String s, int idleFrames,int frameWidth, int frameHeight)
 	{
