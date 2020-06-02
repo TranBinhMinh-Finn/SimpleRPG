@@ -72,7 +72,7 @@ public class MainGameScreen implements Screen {
 		// bullet testing ...
 		
 		ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
-		ArrayList mobsToRemove = new ArrayList<Mob>();
+		ArrayList<Mob> mobsToRemove = new ArrayList<Mob>();
 		for(Bullet i : bullets) {
 			i.update(del);
 			if(i.remove == true) {

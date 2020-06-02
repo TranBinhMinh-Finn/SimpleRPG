@@ -1,12 +1,5 @@
 package com.game.entity;
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.Constants;
 import com.game.SimpleRPG;
@@ -37,10 +30,9 @@ public class Player extends Mob {
 		this.game = game;
 	}
 	
-	
 	public void render(float del)
 	{
-		if(vel.len()!=0)
+		if(this.body.getLinearVelocity().len()!=0)
 			this.render(del,runAnimation,runFrames,game.batch);
 		else
 			this.render(del,idleAnimation,idleFrames,game.batch);
