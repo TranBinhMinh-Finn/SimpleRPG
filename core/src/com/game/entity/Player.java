@@ -36,5 +36,50 @@ public class Player extends Mob {
 			this.render(del,runAnimation,runFrames,game.batch);
 		else
 			this.render(del,idleAnimation,idleFrames,game.batch);
+		
+		
 	}
 }
+/* if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+System.out.println("Player position : " + Gdx.input.getX() + " " + (Gdx.graphics.getHeight() - Gdx.input.getY() + 1));
+bullets.add(new Bullet(x + CHAR_WIDTH*scale/2 , y + CHAR_HEIGHT*scale/2 , Gdx.input.getX(), Gdx.input.getY()));
+}
+
+boolean pressedKey = false;
+if(Gdx.input.isKeyPressed(Keys.UP))
+{
+pressedKey = true;
+y += SPEED*del;
+//if(y+CHAR_WIDTH*scale>SimpleRPG.HEIGHT)y = SimpleRPG.HEIGHT-CHAR_HEIGHT*scale;
+
+}
+if(Gdx.input.isKeyPressed(Keys.DOWN))
+{
+pressedKey = true;
+y -= SPEED*del;
+//if(y<0)y=0;
+}
+if(Gdx.input.isKeyPressed(Keys.RIGHT))
+{
+flip = false;
+pressedKey = true;
+x += SPEED*del;
+//if(x+CHAR_WIDTH*scale>SimpleRPG.WIDTH)x = SimpleRPG.WIDTH-CHAR_WIDTH*scale;
+}
+if(Gdx.input.isKeyPressed(Keys.LEFT))
+{
+pressedKey = true;
+flip = true;
+x -= SPEED*del;
+//if(x<0)x=0;
+}
+
+
+stateTime +=  del*5;
+if(pressedKey)
+render(del,run,runFrames);
+else
+render(del,idle,idleFrames);
+
+
+>>>>>>> bigdemon2 */

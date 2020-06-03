@@ -87,7 +87,6 @@ public class Entity {
 	{
 		return (body.getPosition().x - box2DWidth)*Constants.BOX2D_SCALE;
 	}
-	
 	public float getYByPixels()
 	{
 		return (body.getPosition().y - box2DHeight)*Constants.BOX2D_SCALE;
