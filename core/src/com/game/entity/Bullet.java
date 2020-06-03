@@ -18,7 +18,7 @@ public class Bullet extends Entity{
 	Vector2 vel;
 	public Bullet(float x , float y , float target_x , float target_y, World world) {
 		super(x, y, BULLET_WIDTH, BULLET_HEIGHT, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, Constants.BIT_ENEMY, (short)0);
-		target_y = Gdx.graphics.getHeight() - target_y + 1;
+		//target_y = Gdx.graphics.getHeight() - target_y + 1;
 		remove = false;
 		if(texture == null) texture = new Texture("bullet.png");
 		if(region == null) region = new TextureRegion(texture);

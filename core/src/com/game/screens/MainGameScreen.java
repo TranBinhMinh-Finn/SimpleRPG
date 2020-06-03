@@ -1,10 +1,13 @@
 package com.game.screens;
 
 import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -13,14 +16,12 @@ import com.game.Constants;
 import com.game.SimpleRPG;
 import com.game.entity.Big_Demon;
 import com.game.entity.Bullet;
+import com.game.entity.CameraStyles;
 import com.game.entity.Mob;
 import com.game.entity.Player;
+import com.game.entity.Room;
 import com.game.handlers.InputHandler;
 import com.game.handlers.WorldContactListener;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.game.entity.CameraStyles;
-import com.game.entity.Room;
 
 public class MainGameScreen implements Screen {
 	SimpleRPG game;
@@ -67,7 +68,7 @@ public class MainGameScreen implements Screen {
 		renderer = new Box2DDebugRenderer();
 		float w_ = Gdx.graphics.getWidth()/2;                                      
 		float h_ = Gdx.graphics.getHeight()/2;                         
-		//cam = new OrthographicCamera(w_,h_);
+		cam = new OrthographicCamera(w_,h_);
 		cam = camera;
 		//cam.setToOrtho(false, w_ / Constants.BOX2D_SCALE, h_ / Constants.BOX2D_SCALE);
 		debugMatrix = new Matrix4(cam.combined);
@@ -97,7 +98,7 @@ public class MainGameScreen implements Screen {
 		Gdx.gl.glClearColor(0.5f, 0.2f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		// bullet testing ...
+		// removing dead mobs / bullets landed
 		
 		ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
 		ArrayList<Mob> mobsToRemove = new ArrayList<Mob>();
@@ -116,35 +117,23 @@ public class MainGameScreen implements Screen {
 				mobsToRemove.add(i);
 			}
 		}
+		
+		
 		bullets.removeAll(bulletsToRemove);
 		monsterList.removeAll(mobsToRemove);
-		// entity behavior code 
-		inputHandler.keyHandler(del);
-		inputHandler.mouseClickHandler(del, bullets);
 		
+		// call the input handler
+		
+		inputHandler.keyHandler(del);
+		inputHandler.mouseClickHandler(del, bullets, camera);
+		
+		//box2DWorld steps
 		world.step(timeStep, velocityIterations, positionIterations);
-		///end bullet code  
 		
 		///camera test
 		CameraStyles.lerpToTarget(camera, player.getXByPixels() , player.getYByPixels());
 		/// end camera test
 		
-		game.batch.begin(); /// begin here -------------------------------------
-		game.sprite.draw(game.batch);
-		
-		for(Bullet i : bullets) {
-			i.render(game.batch);
-		}
-		player.render(del);
-		
-		for(Mob i : monsterList)
-		{
-			Big_Demon tmp  = (Big_Demon) i ;
-			tmp.render(del);
-		}
-		
-		//rendering the debug Box2D world
-		//renderer.render(world,debugMatrix);
 		for(int i = 1 ; i <= 6 ; ++i) {
 			if(rooms[i].inRoom(player.getXByPixels() , player.getYByPixels())== true) {
 				//System.out.println("check in room :" + i);
@@ -166,7 +155,30 @@ public class MainGameScreen implements Screen {
 			}
 		}
 		
+		debugMatrix = new Matrix4(camera.combined);
+		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
+		
+		game.batch.begin(); /// begin here -------------------------------------
+		
+		game.sprite.draw(game.batch);
+		
+		
+		for(Bullet i : bullets) {
+			i.render(game.batch);
+		}
+		player.render(del);
+		
+		for(Mob i : monsterList)
+		{
+			Big_Demon tmp  = (Big_Demon) i ;
+			tmp.render(del);
+		}
+		//renderer.render(world,debugMatrix);
+		//rendering the debug Box2D world
+		
+		
 		game.batch.setProjectionMatrix(camera.combined);
+		
 		/*game.batch.draw(rec , 800, 4475 , 252 + 32 , 217 + 32); 
 		game.batch.draw(rec ,29, 1942,1773+32,1700+32);
 		game.batch.draw(rec , 2655 ,2726-16, 1003+32 , 938+32);
