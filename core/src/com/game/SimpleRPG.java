@@ -26,6 +26,6 @@ public class SimpleRPG extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		sprite.getTexture().dispose();
+		//sprite.getTexture().dispose();
 	}
 }

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.game.Constants;
 import com.game.SimpleRPG;
+import com.game.utils.Constants;
 
 public class Big_Demon extends Mob {
 	SimpleRPG game;
@@ -20,7 +20,7 @@ public class Big_Demon extends Mob {
 	private static final int RUN_FRAME_NUMBER = 4;
 	
 	public Big_Demon(SimpleRPG game, float x, float y, World world ) {
-		super(x, y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-4)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED, Constants.BIT_ENEMY,(short) (Constants.BIT_BULLET | Constants.BIT_PLAYER | Constants.BIT_ENEMY), (short) 0);
+		super(x, y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-4)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED, Constants.BIT_ENEMY,(short) (Constants.BIT_BULLET | Constants.BIT_PLAYER | Constants.BIT_ENEMY | Constants.BIT_WALL), (short) 0);
 		this.importIdleAnimation("big_demon_idle.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.importRunAnimation("big_demon_run.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.game = game;

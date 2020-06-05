@@ -1,4 +1,4 @@
-package com.game.entity;
+package com.game.handlers;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;

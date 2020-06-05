@@ -63,9 +63,9 @@ public class Mob extends Entity {
 		stateTime +=  del*5;
 		batch.draw( anim[animFrames].getKeyFrame(stateTime, true), flip?this.getXByPixels()+frameWidth:this.getXByPixels(), this.getYByPixels(),0,0,frameWidth,frameHeight,flip?-1:1,1,0);
 	}
-	public void contactHandle(Entity s)
+	public void contactHandle(Object object)
 	{
-		if(s instanceof Bullet)
+		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
 			hp -= 10;

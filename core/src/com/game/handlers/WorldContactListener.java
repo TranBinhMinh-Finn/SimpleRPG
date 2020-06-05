@@ -17,10 +17,18 @@ public class WorldContactListener implements ContactListener {
 		if(a == null || b == null) return ;
 		if(a.getUserData() == null || b.getUserData() == null) return ;
 		
-		Entity objectA = (Entity) a.getUserData();
-		Entity objectB = (Entity) b.getUserData();
-		objectA.contactHandle(objectB);
-		objectB.contactHandle(objectA);
+		Object objectA = a.getUserData();
+		Object objectB = b.getUserData();
+		if(objectA instanceof Entity)
+		{
+			Entity entityA = (Entity) objectA;
+			entityA.contactHandle(objectB);
+		}
+		if(objectB instanceof Entity)
+		{
+			Entity entityB = (Entity) objectB;
+			entityB.contactHandle(objectA);
+		}
 	}
 
 	@Override

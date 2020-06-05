@@ -1,4 +1,4 @@
-package com.game;
+package com.game.utils;
 
 public class Constants {
 	public static final int BOX2D_SCALE = 10;

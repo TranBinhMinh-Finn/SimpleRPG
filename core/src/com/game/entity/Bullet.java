@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.game.utils.Constants;
 import com.badlogic.gdx.physics.box2d.World;
-import com.game.Constants;
 
 public class Bullet extends Entity{
 	public static final float SPEED = 500;
@@ -17,7 +17,7 @@ public class Bullet extends Entity{
 	private static TextureRegion region;
 	Vector2 vel;
 	public Bullet(float x , float y , float target_x , float target_y, World world) {
-		super(x, y, BULLET_WIDTH, BULLET_HEIGHT, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, Constants.BIT_ENEMY, (short)0);
+		super(x, y, BULLET_WIDTH, BULLET_HEIGHT, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, (short)(Constants.BIT_ENEMY|Constants.BIT_WALL), (short)0);
 		//target_y = Gdx.graphics.getHeight() - target_y + 1;
 		remove = false;
 		if(texture == null) texture = new Texture("bullet.png");
@@ -36,7 +36,7 @@ public class Bullet extends Entity{
 		if(this.getYByCenter() < 0) remove = true;
 		if(this.getXByCenter() < 0) remove = true;
 	}
-	public void contactHandle(Entity s)
+	public void contactHandle(Object object)
 	{
 		body.setLinearVelocity(new Vector2(0,0));
 		remove = true;
