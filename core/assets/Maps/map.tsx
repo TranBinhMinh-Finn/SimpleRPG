@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.4" name="map" tilewidth="48" tileheight="48" tilecount="36" columns="0">
+<tileset version="1.2" tiledversion="1.3.4" name="map" tilewidth="48" tileheight="48" tilecount="41" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="71">
   <image width="16" height="16" source="tren - Copy (2).png"/>
@@ -12,9 +12,6 @@
  </tile>
  <tile id="74">
   <image width="16" height="16" source="tren.png"/>
- </tile>
- <tile id="75">
-  <image width="32" height="32" source="original - Copy (13) - Copy - Copy - Copy - Copy.png"/>
  </tile>
  <tile id="76">
   <image width="16" height="16" source="phai - Copy (2).png"/>
@@ -76,23 +73,8 @@
  <tile id="95">
   <image width="16" height="16" source="duoitrai.png"/>
  </tile>
- <tile id="96">
-  <image width="48" height="32" source="map - Copy.png"/>
- </tile>
  <tile id="97">
   <image width="16" height="16" source="cau.png"/>
- </tile>
- <tile id="99">
-  <image width="32" height="48" source="map - Copy (2).png"/>
- </tile>
- <tile id="100">
-  <image width="32" height="48" source="map - Copy (3).png"/>
- </tile>
- <tile id="101">
-  <image width="32" height="32" source="original - Copy (10) - Copy - Copy - Copy.png"/>
- </tile>
- <tile id="102">
-  <image width="32" height="32" source="lamcham.png"/>
  </tile>
  <tile id="103">
   <image width="16" height="16" source="song.png"/>
@@ -108,5 +90,38 @@
  </tile>
  <tile id="107">
   <image width="32" height="32" source="tuongchan3.png"/>
+ </tile>
+ <tile id="108">
+  <image width="16" height="16" source="san2.1.png"/>
+ </tile>
+ <tile id="109">
+  <image width="16" height="16" source="san2.2.png"/>
+ </tile>
+ <tile id="110">
+  <image width="16" height="16" source="san2.3.png"/>
+ </tile>
+ <tile id="111">
+  <image width="16" height="16" source="san2.4.png"/>
+ </tile>
+ <tile id="112">
+  <image width="16" height="16" source="san.png"/>
+ </tile>
+ <tile id="113">
+  <image width="16" height="16" source="lamcham.png"/>
+ </tile>
+ <tile id="116">
+  <image width="48" height="32" source="Conglayer3.png"/>
+ </tile>
+ <tile id="117">
+  <image width="48" height="32" source="map - Copy (4).png"/>
+ </tile>
+ <tile id="118">
+  <image width="32" height="48" source="Congngang.png"/>
+ </tile>
+ <tile id="120">
+  <image width="32" height="48" source="map - Copy (5).png"/>
+ </tile>
+ <tile id="121">
+  <image width="32" height="48" source="map - Copy.png"/>
  </tile>
 </tileset>

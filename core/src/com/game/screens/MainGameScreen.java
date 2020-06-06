@@ -49,8 +49,8 @@ public class MainGameScreen implements Screen {
 	private OrthogonalTiledMapRenderer tmr;
 	private TiledMap map;
 	float mapScale = 3;
-	private int[] layerIndices1;
-	private int[] layerIndices2;
+	private int[] wallIndices;
+	private int[] groundIndices;
 	private OrthographicCamera camera;
 	
 	
@@ -60,7 +60,7 @@ public class MainGameScreen implements Screen {
 		this.game = game;
 		world = new World(new Vector2(0f,0f),false);
 		bullets = new ArrayList<Bullet>();
-		player = new Player(game,300,300,world);
+		player = new Player(game,4000,4200,world);
 		monsterList = new ArrayList<Mob>();
 		monsterList.add(new Big_Demon(game,600,200,world));
 		world.setContactListener(new WorldContactListener());
@@ -68,15 +68,15 @@ public class MainGameScreen implements Screen {
 		//Setting up inputHandler
 		inputHandler = new InputHandler(player);
 		
-		map = new TmxMapLoader().load("Maps/mapSprite.tmx");
+		map = new TmxMapLoader().load("Maps/map.tmx");
 		tmr = new OrthogonalTiledMapRenderer(map,mapScale);
-		layerIndices2 = new int[] {
-				map.getLayers().getIndex("Tile Layer 2"),
+		wallIndices = new int[] {
+				map.getLayers().getIndex("WallTiles"),
 				
 				
 		};
-		layerIndices1 = new int[] {
-				map.getLayers().getIndex("Tile Layer 1"),
+		groundIndices = new int[] {
+				map.getLayers().getIndex("GroundTiles"),
 				
 				
 		};
@@ -180,7 +180,7 @@ public class MainGameScreen implements Screen {
 		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
 		
 		tmr.setView(camera);
-		tmr.render(layerIndices2);
+		tmr.render(groundIndices);
 		//tmr.getBatch().begin();
 		//tmr.renderTileLayer((TiledMapTileLayer) map.getLayers().get("Tile Layer 1"));
 		//tmr.renderTileLayer((TiledMapTileLayer) map.getLayers().get("Tile Layer 2"));
@@ -208,8 +208,8 @@ public class MainGameScreen implements Screen {
 		
 		game.batch.end(); /// end here ----------------------------------------------
 		
-		tmr.render(layerIndices1);
-		//renderer.render(world,debugMatrix);
+		tmr.render(wallIndices);
+		renderer.render(world,debugMatrix);
 		//rendering the debug Box2D world
 		
 	}

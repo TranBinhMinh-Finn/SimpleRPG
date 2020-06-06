@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.game.entity.Bullet;
 import com.game.entity.Player;
+import com.game.utils.Constants;
 
 public class InputHandler {
 	Player player;
@@ -52,7 +53,7 @@ public class InputHandler {
 			
 			Vector3 touchPos = new Vector3(X,Y,0); 
 			touchPos = camera.unproject(touchPos);
-			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.body.getWorld()));
+			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.body.getWorld(),Constants.BIT_ENEMY));
 		}
 	}
 }

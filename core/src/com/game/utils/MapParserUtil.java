@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.ChainShape;
@@ -22,21 +23,26 @@ public class MapParserUtil {
 			 if(object instanceof PolylineMapObject)
 			 {
 				 shape = createPolyline((PolylineMapObject) object, mapScale);
-				 if(objectType == "Wall")
-				 {
-					 Wall wall = new Wall(shape,world);
-				 }
-				 shape.dispose();
+				 
 			 }
-			 if(object instanceof PolygonMapObject)
+			 else if(object instanceof PolygonMapObject)
 			 {
 				 shape  = createPolygon((PolygonMapObject)object,mapScale);
-				 if(objectType == "River")
-				 {
-					 River river = new River(shape,world);
-				 }
-				 shape.dispose();
 			 }
+			 /*else if(object instanceof RectangleMapObject)
+			 {
+				 shape = createRectangle((RectangleMapObject) object, mapScale);
+			 }*/
+			 else continue;
+			 if(objectType == "Wall")
+			 {
+				 Wall wall = new Wall(shape,world);
+			 }
+			 if(objectType == "River")
+			 {
+				 River river = new River(shape,world);
+			 }
+			 shape.dispose();
 		}
 	}
 	private static ChainShape createPolyline(PolylineMapObject polyline,float mapScale)
@@ -64,5 +70,19 @@ public class MapParserUtil {
 		ChainShape chainShape = new ChainShape();
 		chainShape.createChain(worldVertices);
 		return chainShape;
+	}
+	private static ChainShape createRectangle(RectangleMapObject rectangle,float mapScale)
+	{
+		Vector2 center = new Vector2();
+		rectangle.getRectangle().getCenter(center);
+		
+		/*for(int i=0;i<worldVertices.length;++i)
+		{
+			worldVertices[i] = new Vector2(vertices[i*2]/ Constants.BOX2D_SCALE * mapScale, vertices[i*2+1]/ Constants.BOX2D_SCALE * mapScale);
+		}
+		ChainShape chainShape = new ChainShape();
+		chainShape.createChain(worldVertices);
+		return chainShape;*/
+		return null;
 	}
 }

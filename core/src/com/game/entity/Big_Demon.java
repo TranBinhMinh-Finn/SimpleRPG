@@ -82,7 +82,7 @@ public class Big_Demon extends Mob {
 	}
 	public void render(float del)
 	{
-		this.body.setLinearVelocity(new Vector2(0,0));
+		//this.body.setLinearVelocity(new Vector2(0,0));
 		if(vel.len()!=0)
 			this.render(del,runAnimation,runFrames,game.batch);
 		else

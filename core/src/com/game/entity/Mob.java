@@ -72,5 +72,24 @@ public class Mob extends Entity {
 			if(hp == 0)
 				remove = true;
 		}
+		if(object instanceof Enemy)
+		{
+			Enemy e = (Enemy) object;
+			if(e.charging)
+			{
+				if(this instanceof Player)
+				{
+					hp -= 30;
+					if(hp == 0)
+						remove = true;
+					//GameOverScreen
+				}
+				/*Vector2 force = e.body.getLinearVelocity();
+				force.setLength(speed*5);
+				body.applyForce(force, this.body.getPosition(), true);*/
+				
+		
+			}
+		}
 	}
 }
