@@ -13,12 +13,7 @@ import com.game.entity.Player;
 import com.game.utils.Constants;
 
 public class InputHandler {
-	Player player;
-	public InputHandler(Player player)
-	{
-		this.player = player;
-	}
-	public void keyHandler(float del)
+	public static void keyHandler(float del, Player player)
 	{
 		float velX = 0;
 		float velY = 0;
@@ -32,8 +27,8 @@ public class InputHandler {
 		}
 		if(Gdx.input.isKeyPressed(Keys.RIGHT))
 		{
-			player.flip = false;
 			velX = 1;
+			player.flip = false;
 		}
 		if(Gdx.input.isKeyPressed(Keys.LEFT))
 		{
@@ -41,11 +36,11 @@ public class InputHandler {
 			velX = -1;
 		}
 		Vector2 vel = new Vector2(velX,velY);
-		vel.setLength(Player.SPEED*del*50);
+		vel.setLength(Player.SPEED*del*50 * player.slowed);
 		player.body.setLinearVelocity(vel);
 	}
 	
-	public void mouseClickHandler(float del, ArrayList<Bullet> bullets, OrthographicCamera camera)
+	public static void mouseClickHandler(float del, Player player, ArrayList<Bullet> bullets, OrthographicCamera camera)
 	{	
 		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 			float X = Gdx.input.getX();

@@ -1,5 +1,7 @@
 package com.game.screens;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,7 +46,7 @@ public class MainMenuScreen implements Screen {
 		int y_exit = EXIT_BUTTON_Y;
 		int y_start = START_BUTTON_Y;
 		//game.batch.draw(playButtonActive,100,400,BUTTON_WIDTH,BUTTON_HEIGHT);
-		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && SimpleRPG.HEIGHT - Gdx.input.getY() < y_exit + BUTTON_HEIGHT && SimpleRPG.HEIGHT - Gdx.input.getY()> y_exit)
+		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && Gdx.graphics.getHeight() - Gdx.input.getY() < y_exit + BUTTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY()> y_exit)
 		{
 			game.batch.draw(exitButtonActive,x,y_exit,BUTTON_WIDTH,BUTTON_HEIGHT);
 			if(Gdx.input.isTouched())
@@ -52,13 +54,19 @@ public class MainMenuScreen implements Screen {
 		}
 		else
 			game.batch.draw(exitButtonInactive,x,y_exit,BUTTON_WIDTH,BUTTON_HEIGHT);
-		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && SimpleRPG.HEIGHT - Gdx.input.getY() < y_start + BUTTON_HEIGHT && SimpleRPG.HEIGHT - Gdx.input.getY()> y_start)
+		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && Gdx.graphics.getHeight() - Gdx.input.getY() < y_start + BUTTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY()> y_start)
 		{	
 			game.batch.draw(playButtonActive,x,y_start,BUTTON_WIDTH,BUTTON_HEIGHT);
 			if(Gdx.input.isTouched())
 			{
 				this.dispose();
-				game.setScreen(new MainGameScreen(game));
+				try {
+					game.setScreen(new MainGameScreen(game));
+				} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+						| IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		else

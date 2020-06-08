@@ -5,7 +5,6 @@ import com.game.SimpleRPG;
 import com.game.utils.Constants;
 
 public class Player extends Mob {
-	SimpleRPG game ;
 	public static final int FRAME_WIDTH = 16;
 	public static final int FRAME_HEIGHT = 16;
 	public static final int IDLE_FRAME_NUMBER = 6;
@@ -16,7 +15,7 @@ public class Player extends Mob {
 	public static final int player_hp = 100;
 	public static final int player_atk = 10;
 	float stateTime;
-	
+	public float slowed = 1;
 	
 	//this.importIdleAnimation("knight_idle_spritesheet.png", FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 	//this.importRunAnimation("knight_run_spritesheet.png", FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
@@ -24,19 +23,10 @@ public class Player extends Mob {
 	
 	public Player(SimpleRPG game, float x, float y, World world)
 	{
-		super(x, y, FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH - 4)*scale, (FRAME_HEIGHT - 3)*scale, world, player_hp, player_atk, SPEED, CHAR_ANIMATION_SPEED, Constants.BIT_PLAYER, (short)(Constants.BIT_ENEMY|Constants.BIT_WALL), (short)0);
-		this.importIdleAnimation("knight_idle_spritesheet.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
-		this.importRunAnimation("knight_run_spritesheet.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
-		this.game = game;
+		super(x, y, FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH - 4)*scale, (FRAME_HEIGHT - 3)*scale, world, player_hp, player_atk, SPEED, CHAR_ANIMATION_SPEED, Constants.BIT_PLAYER, (short)(Constants.BIT_ENEMY|Constants.BIT_WALL|Constants.BIT_BULLET), (short)0);
+		this.importIdleAnimation("Entity/Player/knight_idle_spritesheet.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
+		this.importRunAnimation("Entity/Player/knight_run_spritesheet.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 	}
 	
-	public void render(float del)
-	{
-		if(this.body.getLinearVelocity().len()!=0)
-			this.render(del,runAnimation,runFrames,game.batch);
-		else
-			this.render(del,idleAnimation,idleFrames,game.batch);
-		
-		
-	}
+	
 }

@@ -12,6 +12,7 @@ public class Mob extends Entity {
 	Vector2 vel;
 	int hp;
 	int atk;
+	public int currentRoomId;
 	Animation<TextureRegion>[] runAnimation;
 	Animation<TextureRegion>[] idleAnimation;
 	float animation_speed;
@@ -37,13 +38,6 @@ public class Mob extends Entity {
 		this.animation_speed = animation_speed;
 	}
 	
-	
-	public boolean isFlip() {
-		return flip;
-	}
-	public void setFlip(boolean flip) {
-		this.flip = flip;
-	}
 	void importIdleAnimation(String s, int idleFrames,int frameWidth, int frameHeight)
 	{
 		this.idleFrames = idleFrames;
@@ -58,6 +52,21 @@ public class Mob extends Entity {
 		TextureRegion[][] runSpriteSheet = TextureRegion.split(new Texture(s), frameWidth, frameHeight);
 		runAnimation[runFrames] = new Animation<TextureRegion>(animation_speed, runSpriteSheet[0]);
 	}
+	public void render(float del, SpriteBatch batch)
+	{
+		if(!(this instanceof Player))
+		{
+		if(this.body.getLinearVelocity().x<0)
+			flip = true;
+		if(this.body.getLinearVelocity().x>0)
+			flip = false;
+		}
+		if(this.body.getLinearVelocity().len()!=0)
+			this.render(del,runAnimation,runFrames,batch);
+		else
+			this.render(del,idleAnimation,idleFrames,batch);
+	}
+	
 	public void render(float del, Animation<TextureRegion>[] anim,int animFrames,SpriteBatch batch)
 	{
 		stateTime +=  del*5;
@@ -65,6 +74,7 @@ public class Mob extends Entity {
 	}
 	public void contactHandle(Object object)
 	{
+		this.body.setLinearVelocity(new Vector2());
 		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
