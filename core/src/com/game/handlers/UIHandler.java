@@ -18,20 +18,20 @@ public class UIHandler {
 	private static final float scale = 5;
 	public static void init()
 	{
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() , Gdx.graphics.getHeight());
-		stage = new Stage(new FitViewport(SimpleRPG.WIDTH, SimpleRPG.HEIGHT, camera));
+		camera = new OrthographicCamera(SimpleRPG.WIDTH ,SimpleRPG.HEIGHT);
+		stage = new Stage(new FitViewport(SimpleRPG.WIDTH ,SimpleRPG.HEIGHT, camera));
 		
 		//Gdx.input.setInputProcessor(stage);
 		
 		Texture texture = new Texture("UI/healthUI.png");
 		healthBarUI = new Image(texture);
-		healthBarUI.setPosition(30, Gdx.graphics.getHeight() - 100);
+		healthBarUI.setPosition(30, SimpleRPG.HEIGHT - 100);
 		healthBarUI.setScale(scale);
 		stage.addActor(healthBarUI);
 		
 		texture = new Texture("UI/healthBar.png");
 		healthBar = new Image(texture);
-		healthBar.setPosition(115, Gdx.graphics.getHeight() - 65);
+		healthBar.setPosition(115, SimpleRPG.HEIGHT - 65);
 		healthBar.setScale(scale);
 		healthBar.setScaleX(healthBarScale);
 		stage.addActor(healthBar);

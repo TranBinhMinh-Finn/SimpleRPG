@@ -2,8 +2,10 @@ package com.game.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -16,8 +18,9 @@ import com.game.map.Map;
 import com.game.utils.Constants;
 
 public class GameStateManager {
+	
+	private static SpriteBatch batch;
 	// box2DWorld variables
-	private static SimpleRPG game;
 	private static World world;
 	private static float timeStep = 1f/60f;
 	private static int velocityIterations = 6, positionIterations = 3;
@@ -33,9 +36,9 @@ public class GameStateManager {
 	private static Map map;
 	private static OrthographicCamera camera;
 	static boolean inSlow;
-	public static void init(SimpleRPG game) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public static void init(SpriteBatch batch) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		GameStateManager.game = game;
+		GameStateManager.batch = batch;
 		world = new World(new Vector2(0f,0f),false);
 		world.setContactListener(new WorldContactListener());
 		
@@ -47,9 +50,8 @@ public class GameStateManager {
 			monsterList.add(map.enemyList[i]);
 		bullets = new ArrayList<Bullet>();
 		
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() , Gdx.graphics.getHeight());
+		camera = new OrthographicCamera(SimpleRPG.WIDTH , SimpleRPG.HEIGHT);
 		camera.translate(camera.viewportWidth/2 , camera.viewportHeight/2);
-		
 		//Setting up Box2D Debug Renderer
 		renderer = new Box2DDebugRenderer();
 		
@@ -116,21 +118,21 @@ public class GameStateManager {
 		
 		map.renderGroundLayer(); // renders the ground layer of the map
 		
-		game.batch.begin(); 
+		batch.begin(); 
 		
-		game.batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		
 		for(Bullet i : bullets) {
-			i.render(game.batch);   //renders bullets
+			i.render(batch);   //renders bullets
 		}
-		player.render(del,game.batch);
+		player.render(del,batch);
 		
 		for(Enemy i : monsterList)
 		{	 //renders mobs
-			i.render(del,game.batch);
+			i.render(del,batch);
 		}
 		
-		game.batch.end(); 
+		batch.end(); 
 		
 		map.renderWallLayer(); // renders the wall layer of the map
 		

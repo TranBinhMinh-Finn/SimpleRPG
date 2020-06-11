@@ -871,6 +871,11 @@
  </tile>
  <tile id="372">
   <image width="16" height="16" source="0x72_DungeonTilesetII_v1.3.1/frames/wall_fountain_basin_red_anim_f0.png"/>
+  <animation>
+   <frame tileid="372" duration="200"/>
+   <frame tileid="373" duration="200"/>
+   <frame tileid="374" duration="200"/>
+  </animation>
  </tile>
  <tile id="373">
   <image width="16" height="16" source="0x72_DungeonTilesetII_v1.3.1/frames/wall_fountain_basin_red_anim_f1.png"/>
@@ -889,6 +894,11 @@
  </tile>
  <tile id="378">
   <image width="16" height="16" source="0x72_DungeonTilesetII_v1.3.1/frames/wall_fountain_mid_red_anim_f0.png"/>
+  <animation>
+   <frame tileid="378" duration="200"/>
+   <frame tileid="379" duration="200"/>
+   <frame tileid="380" duration="200"/>
+  </animation>
  </tile>
  <tile id="379">
   <image width="16" height="16" source="0x72_DungeonTilesetII_v1.3.1/frames/wall_fountain_mid_red_anim_f1.png"/>

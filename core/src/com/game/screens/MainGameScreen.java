@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.SimpleRPG;
 
 import com.game.handlers.GameStateManager;
@@ -12,10 +13,11 @@ import com.game.handlers.GameStateManager;
 public class MainGameScreen implements Screen {
 	// box2DWorld variables
 	
-	
+	public SpriteBatch batch;
 	public MainGameScreen(SimpleRPG game) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		GameStateManager.init(game);	
+		batch = new SpriteBatch();
+		GameStateManager.init(game.batch);	
 	}
 	
 	@Override

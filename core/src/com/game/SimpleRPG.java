@@ -14,7 +14,7 @@ public class SimpleRPG extends Game {
 	public Sprite sprite ;
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
-	public BitmapFont font;
+	public BitmapFont font_black, font_white;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -22,9 +22,12 @@ public class SimpleRPG extends Game {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("UI/Awkward.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 100;
-		font = generator.generateFont(parameter);
+		font_black = generator.generateFont(parameter);
+		font_black.setColor(0f, 0f, 0f, 1f);
+		parameter.size = 200;
+		font_white = generator.generateFont(parameter);
+		font_white.setColor(1f, 1f, 1f, 1f);
 		generator.dispose();
-		font.setColor(0f, 0f, 0f, 1f);
 		
 	}
 
