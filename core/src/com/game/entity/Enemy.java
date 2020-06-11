@@ -12,7 +12,7 @@ public class Enemy extends Mob {
 	public static int ranged = 1;
 	static float attackDelay = 5;
 	static float range2 = 500;
-	boolean charging;
+	public boolean charging;
 	float range;
 	public int type;
 	float attackWaitTime = attackDelay;
@@ -113,21 +113,12 @@ public class Enemy extends Mob {
 	}
 	public void contactHandle(Object object)
 	{
-		
 		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
 			hp -= 10;
 			if(hp == 0)
 				remove = true;
-		}
-		else
-		{
-			if(charging == true)
-			{
-				charging = false;
-			}
-			vel.setLength(0);
 		}
 	}
 	private int lastActionX = 0,lastActionY = 0, lastRepeats = 0;

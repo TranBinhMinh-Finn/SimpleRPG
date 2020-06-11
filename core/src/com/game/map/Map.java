@@ -1,9 +1,9 @@
 package com.game.map;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -17,6 +17,10 @@ import com.game.entity.Wogol;
 import com.game.utils.MapParserUtil;
 
 public class Map {
+	private ArrayList<Wall> walls;
+	private ArrayList<River> rivers;
+	private ArrayList<Room> rooms;
+	
 	Wall[] wallList;
 	River[] riverList;
 	Room[] roomList;

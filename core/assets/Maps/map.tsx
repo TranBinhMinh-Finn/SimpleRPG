@@ -3,6 +3,10 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="71">
   <image width="16" height="16" source="tren - Copy (2).png"/>
+  <animation>
+   <frame tileid="378" duration="50"/>
+   <frame tileid="379" duration="50"/>
+  </animation>
  </tile>
  <tile id="72">
   <image width="16" height="16" source="tren - Copy (3).png"/>

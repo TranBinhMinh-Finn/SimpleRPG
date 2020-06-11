@@ -5,7 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.game.SimpleRPG;
 
 
@@ -23,14 +26,18 @@ public class MainMenuScreen implements Screen {
 	Texture playButtonInactive;
 	Texture exitButtonActive;
 	Texture exitButtonInactive;
+	OrthographicCamera camera;
+	Stage stage;
 	public MainMenuScreen(SimpleRPG game) {
 		this.game = game;
+		camera = new OrthographicCamera(Gdx.graphics.getWidth() , Gdx.graphics.getHeight());
+		stage = new Stage(new FitViewport(SimpleRPG.WIDTH, SimpleRPG.HEIGHT, camera));
+		
 		playButtonActive = new Texture("playButtonActive.png");
 		playButtonInactive = new Texture("playButtonInactive.png");
 		exitButtonActive = new Texture("exitButtonActive.png");
 		exitButtonInactive = new Texture("exitButtonInactive.png");
 	}
-
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -46,7 +53,9 @@ public class MainMenuScreen implements Screen {
 		int y_exit = EXIT_BUTTON_Y;
 		int y_start = START_BUTTON_Y;
 		//game.batch.draw(playButtonActive,100,400,BUTTON_WIDTH,BUTTON_HEIGHT);
-		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && Gdx.graphics.getHeight() - Gdx.input.getY() < y_exit + BUTTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY()> y_exit)
+		float X = Gdx.input.getX();
+		float Y = Gdx.graphics.getHeight() - Gdx.input.getY();
+		if(X < x + BUTTON_WIDTH && X> x && Y < y_exit + BUTTON_HEIGHT && Y> y_exit)
 		{
 			game.batch.draw(exitButtonActive,x,y_exit,BUTTON_WIDTH,BUTTON_HEIGHT);
 			if(Gdx.input.isTouched())
@@ -54,7 +63,7 @@ public class MainMenuScreen implements Screen {
 		}
 		else
 			game.batch.draw(exitButtonInactive,x,y_exit,BUTTON_WIDTH,BUTTON_HEIGHT);
-		if(Gdx.input.getX() < x + BUTTON_WIDTH && Gdx.input.getX()> x && Gdx.graphics.getHeight() - Gdx.input.getY() < y_start + BUTTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY()> y_start)
+		if(X < x + BUTTON_WIDTH && X> x && Y < y_start + BUTTON_HEIGHT && Y > y_start)
 		{	
 			game.batch.draw(playButtonActive,x,y_start,BUTTON_WIDTH,BUTTON_HEIGHT);
 			if(Gdx.input.isTouched())
@@ -64,7 +73,6 @@ public class MainMenuScreen implements Screen {
 					game.setScreen(new MainGameScreen(game));
 				} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
 						| IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -72,6 +80,7 @@ public class MainMenuScreen implements Screen {
 		else
 			game.batch.draw(playButtonInactive,x,y_start,BUTTON_WIDTH,BUTTON_HEIGHT);
 		game.batch.end();
+		
 	}
 
 	@Override

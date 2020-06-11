@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.game.entity.Entity;
+import com.game.entity.Player;
+import com.game.map.Slow;
 
 public class WorldContactListener implements ContactListener {
 
@@ -44,6 +46,28 @@ public class WorldContactListener implements ContactListener {
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		
+		Fixture a = contact.getFixtureA();
+		Fixture b = contact.getFixtureB();
+		
+		if(a == null || b == null) return ;
+		if(a.getUserData() == null || b.getUserData() == null) return ;
+		/*Object objectA = a.getUserData();
+		Object objectB = b.getUserData();
+		if(objectA instanceof Slow)
+		{
+			Player player = (Player) objectB;
+			player.slowed = 0.5f;
+			contact.setEnabled(false);
+			return ;
+		}
+		if(objectB instanceof Slow)
+		{
+			Player player = (Player) objectA;
+			player.slowed = 0.5f;
+			contact.setEnabled(false);
+			return ;
+		}
+		contact.setEnabled(true);*/
 		
 	}
 

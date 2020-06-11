@@ -94,12 +94,16 @@ public class Mob extends Entity {
 						remove = true;
 					//GameOverScreen
 				}
+				e.charging = false;
+				e.body.setLinearVelocity(new Vector2());
 				/*Vector2 force = e.body.getLinearVelocity();
 				force.setLength(speed*5);
 				body.applyForce(force, this.body.getPosition(), true);*/
-				
-		
 			}
 		}
+	}
+	public int getHP()
+	{
+		return hp;
 	}
 }
