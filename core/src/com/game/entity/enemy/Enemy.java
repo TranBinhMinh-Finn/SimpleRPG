@@ -1,6 +1,7 @@
 package com.game.entity.enemy;
 
 import java.util.ArrayList;
+import java.util.*;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
@@ -8,10 +9,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.entity.Bullet;
+import com.game.entity.Entity;
 import com.game.entity.Mob;
 import com.game.entity.Player;
+import com.game.handlers.GameStateManager;
 import com.game.handlers.SoundManager;
-import com.game.map.Wall;
 import com.game.utils.Constants;
 
 public class Enemy extends Mob {
@@ -24,6 +26,11 @@ public class Enemy extends Mob {
 	public int type;
 	float attackWaitTime = attackDelay;
 	float chargeMultiPlier;
+	
+	boolean obstruct = false;
+	RayCastCallback callback;
+	
+	ArrayList<Vector2> path;
 	public Enemy(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, float range,int type)
 	{	
 		super(x,y,w,h,world,hp,atk,speed,animation_speed,Constants.BIT_ENEMY, (short)(Constants.BIT_BULLET|Constants.BIT_ENEMY|Constants.BIT_PLAYER|Constants.BIT_WALL),(short)0);
@@ -31,17 +38,47 @@ public class Enemy extends Mob {
 		this.type = type;
 		Random random = new Random();
 		attackWaitTime/=random.ints(0,20).findFirst().getAsInt();
+		path = new ArrayList<Vector2>();
+		callback = new RayCastCallback()
+		{
+			
+					@Override
+				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+				if(fixture.getUserData() instanceof Entity)
+				{
+					return -1;
+				}
+					Enemy.this.obstruct = true;
+					return 0;
+				}
+		};
 	}
 	public Enemy(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, float range, int type)
 	{	
 		super(x,y,w,h,box2DWidth,box2DHeight,world,hp,atk,speed,animation_speed,Constants.BIT_ENEMY,(short)(Constants.BIT_BULLET|Constants.BIT_ENEMY|Constants.BIT_PLAYER|Constants.BIT_WALL),(short)0);
 		this.type = type;
 		this.range = range;
+		path = new ArrayList<Vector2>();
+		callback = new RayCastCallback()
+		{
+			
+					@Override
+				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+						if(fixture.getUserData() instanceof Entity)
+						{
+							return -1;
+						}
+						Enemy.this.obstruct = true;
+						return 0;
+				}
+		};
 	}
 	boolean aggroCheck(Player player)
 	{
 		if(this.currentRoomId == player.currentRoomId)
 		{
+			Vector2 distance = new Vector2(player.getXByCenter() - this.getXByCenter(), player.getYByCenter() - this.getYByCenter());
+			//if(distance.len()<100f)
 			return true;
 		}
 		return false;
@@ -61,7 +98,28 @@ public class Enemy extends Mob {
 		return false;
 	}
 	
-	
+	void findPath()
+	{
+		path = GameStateManager.getMap().findPath(this.body.getPosition(), GameStateManager.getPlayer().getBody().getPosition());
+		/*for(Vector2 i: path)
+		{
+			System.out.println(i.x + " " + i.y);
+		}
+		System.out.println("---------------------");*/
+	}
+	private boolean rayCast(Vector2 point1, Vector2 point2, World world)
+	{
+		obstruct = false;
+		world.rayCast(callback, point1, point2);
+		//GameStateManager.line.add(point1);
+		//GameStateManager.line.add(point2);
+		//System.out.println(rayFraction);
+		return obstruct;
+	}
+	private boolean obstructed(Player player)
+	{
+		return rayCast(this.body.getPosition(),player.getBody().getPosition(),this.body.getWorld());
+	}
 	public void actionQuery(Player player, float del)
 	{
 		if(aggroCheck(player)==false)
@@ -69,70 +127,83 @@ public class Enemy extends Mob {
 		if(charging)
 			return ;
 		attackWaitTime -= del;
-		if(attackWaitTime > 0)
+		if(!path.isEmpty())
 		{
-			randomActionQuery(del);
+			if(body.getPosition().dst(path.get(0))<30f)
+			{
+				path.remove(0);
+			}
+			else
+				move(path.get(0).x, path.get(0).y);
 			return ;
 		}
-		if(attackRangeCheck(player.getXByCenter(),player.getYByCenter()))
+		if(obstructed(player))
+			findPath();
+		else 
 		{
-
-			charge(player.getXByCenter(),player.getYByCenter());
-			attackWaitTime = attackDelay;
+			if(attackWaitTime > 0)
+			{
+				randomActionQuery(del);
+				return ;
+			}
+			if(attackRangeCheck(player.getXByCenter(), player.getYByCenter()))
+			{
+				charge(player.getBody().getPosition().x, player.getBody().getPosition().y);
+				attackWaitTime = attackDelay;
+			}
+			else
+				move(player.getBody().getPosition().x, player.getBody().getPosition().y);
 		}
-		else
-			move(player.getXByCenter(),player.getYByCenter());
 	}
 	public void actionQuery(Player player, ArrayList<Bullet> bullets, float del)
 	{
 		if(aggroCheck(player)==false)
 			return;
-		attackWaitTime -= del/2;
-		if(attackWaitTime > 0)
+		if(!path.isEmpty())
 		{
-			randomActionQuery(del);
+			if(body.getPosition().dst(path.get(0))<30f)
+			{
+				path.remove(0);
+			}
+			else
+				move(path.get(0).x, path.get(0).y);
 			return ;
 		}
-		if(attackRangeCheck(player.getXByCenter(),player.getYByCenter()))
+		if(obstructed(player))
+			findPath();
+		else 
 		{
-			
-			shoot(player.getXByCenter(),player.getYByCenter(), bullets);
-			attackWaitTime = attackDelay;
+			attackWaitTime -= del*2;
+			if(attackWaitTime > 0)
+			{
+				randomActionQuery(del);
+				return ;
+			}
+			if(attackRangeCheck(player.getXByCenter(),player.getYByCenter()))
+			{
+				
+				shoot(player.getXByCenter(), player.getYByCenter(),bullets);
+				attackWaitTime = attackDelay;
+			}
+			else if(rangedRangeCheck(player.getXByCenter(),player.getYByCenter()))
+				move(player.getBody().getPosition().x, player.getBody().getPosition().y);
 		}
-		else if(rangedRangeCheck(player.getXByCenter(),player.getYByCenter()))
-			move(player.getXByCenter(),player.getYByCenter());
 	}
-	void charge(float x, float y)
+	private void charge(float x, float y)
 	{
-		Vector2 vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
+		Vector2 vel = new Vector2(x - body.getPosition().x , y - body.getPosition().y);
 		vel.setLength(speed*100*chargeMultiPlier);
 		this.body.setLinearVelocity(vel);
 		charging = true;
 	}
 	
-	void move(float x, float y)
+	private void move(float x, float y)
 	{
-		RayCastCallback callback = new RayCastCallback()
-			{
-
-				@Override
-				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-					Object object = fixture.getUserData();
-					if((object instanceof Enemy) || (object instanceof Bullet))
-						return -1;
-					if(object instanceof Wall)
-					{
-						
-					}
-					return 0;
-				}
-				
-			};
-		Vector2 vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
+		Vector2 vel = new Vector2(x - body.getPosition().x , y - body.getPosition().y);
 		vel.setLength(speed);
 		this.body.setLinearVelocity(vel);
 	}
-	void shoot(float x, float y, ArrayList<Bullet> bullets)
+	private void shoot(float x, float y, ArrayList<Bullet> bullets)
 	{
 		SoundManager.playGunShotSound();
 		bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , x, y, this.body.getWorld(),Constants.BIT_PLAYER, this.getAtk()));
@@ -145,6 +216,10 @@ public class Enemy extends Mob {
 			hp -= 10;
 			if(hp == 0)
 				remove = true;
+		}
+		if(charging == true)
+		{
+			charging = false;
 		}
 	}
 	private int lastActionX = 0,lastActionY = 0, lastRepeats = 0;
@@ -162,8 +237,8 @@ public class Enemy extends Mob {
 		}
 		else
 		{
-			moveX = random.ints(0,3).findFirst().getAsInt();
-			moveY = random.ints(0,3).findFirst().getAsInt();
+			moveX = random.ints(0,2).findFirst().getAsInt();
+			moveY = random.ints(0,2).findFirst().getAsInt();
 			lastActionX = moveX;
 			lastActionY = moveY;
 			lastRepeats = 0;

@@ -7,12 +7,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.SimpleRPG;
 import com.game.entity.Bullet;
+import com.game.entity.Entity;
 import com.game.entity.Player;
 import com.game.entity.enemy.Enemy;
 import com.game.map.Map;
@@ -46,9 +50,9 @@ public class GameStateManager {
 		GameStateManager.batch = new SpriteBatch();
 		world = new World(new Vector2(0f,0f),false);
 		world.setContactListener(new WorldContactListener());
-		
+		line = new ArrayList<Vector2>() ;
 		map = new Map(world);
-	
+		
 		player = new Player(map.spawnPoint.x,map.spawnPoint.y,world);
 		monsterList = new ArrayList<Enemy>();
 		for(int i=1;i<=map.enemyListSize;++i)
@@ -62,6 +66,8 @@ public class GameStateManager {
 		SoundManager.init();
 		UIHandler.init();
 		SoundManager.playBGM();
+		
+		
 	}
 	private static ArrayList<Bullet> bulletsToRemove;
 	private static ArrayList<Bullet> effectsToRemove ;
@@ -73,11 +79,11 @@ public class GameStateManager {
 			return true;
 		return false;
 	}
-	
+	public static ArrayList<Vector2> line;
 	public static void update(float del)
 	{	
 		// removing dead mobs / bullets landed
-		
+		//line.clear();
 		if(gameOver())
 		{
 			UIHandler.update(del,player);
@@ -104,7 +110,6 @@ public class GameStateManager {
 			//i.update(del);
 			if(i.removeEffect == true)
 			{
-				effectsToRemove.add(i);
 				effectsToRemove.add(i);
 			}
 		}
@@ -148,7 +153,7 @@ public class GameStateManager {
 		map.setCamera(camera);
 		
 		UIHandler.update(del,player);
-		//System.out.println(player.getXByPixels() + " " + player.getYByCenter());
+		//System.out.println("Player:" + player.getBody().getPosition().x + " " + player.getBody().getPosition().y);
 	}
 	public static void returnToMenu()
 	{
@@ -191,9 +196,7 @@ public class GameStateManager {
 		
 		map.renderWallLayer(); // renders the wall layer of the map
 		
-		debugMatrix = new Matrix4(camera.combined);     
-		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
-		//renderer.render(world,debugMatrix);  //renders the debug Box2D world
+		
 		
 		if(gameOver())
 		{
@@ -201,6 +204,34 @@ public class GameStateManager {
 		}
 		else
 			UIHandler.render(del);
+		
+		/*debugMatrix = new Matrix4(camera.combined);     
+		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
+		renderer.render(world,debugMatrix);  //renders the debug Box2D world
+		
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+		shapeRenderer.setProjectionMatrix(debugMatrix);
+		if(!line.isEmpty())
+		for(int i=0;i<line.size()-2;++i)
+		{
+			shapeRender(line.get(i),line.get(i+1));
+		}
+		shapeRenderer.end();*/
+	}
+	static ShapeRenderer shapeRenderer = new ShapeRenderer();
+	public static Player getPlayer()
+	{
+		return player;
+	}
+	public static Map getMap()
+	{
+		return map;
+	}
+	public static void shapeRender(Vector2 rayStart, Vector2 rayEnd)
+	{	
+		shapeRenderer.line(rayStart,rayEnd);
+		shapeRenderer.setColor(Color.BLUE);
+		
 	}
 	public static void dispose()
 	{

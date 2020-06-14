@@ -1,6 +1,9 @@
 package com.game.map;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -15,6 +18,7 @@ import com.game.entity.enemy.Chort;
 import com.game.entity.enemy.Enemy;
 import com.game.entity.enemy.Imp;
 import com.game.entity.enemy.Wogol;
+import com.game.handlers.GameStateManager;
 import com.game.utils.MapParserUtil;
 
 public class Map {
@@ -23,6 +27,7 @@ public class Map {
 	Room[] roomList;
 	public Slow[] slowList;
 	public Enemy[] enemyList;
+	ArrayList<KeyPoint> keyPoint;
 	int wallListSize;
 	int riverListSize;
 	public int roomListSize;
@@ -42,6 +47,7 @@ public class Map {
 		slowList = new Slow[100];
 		enemyList= new Enemy[100];
 		spawnPoint = new Vector2();
+		keyPoint = new ArrayList<KeyPoint>();
 		map = new TmxMapLoader().load("Maps/map.tmx");
 		tmr = new OrthogonalTiledMapRenderer(map,mapScale);
 		wallIndices = new int[] {
@@ -61,7 +67,9 @@ public class Map {
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Wogol").getObjects(),mapScale, Wogol.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Chort").getObjects(),mapScale, Chort.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Imp").getObjects(),mapScale, Imp.class,this);
+		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("KeyPoint").getObjects(),mapScale, KeyPoint.class,this);
 		organizeMobs();
+		organizeKeyPoints();
 	}
 	void organizeMobs()
 	{
@@ -76,6 +84,76 @@ public class Map {
 				}
 			}
 		}
+	}
+	static final float inf = (float) Math.pow(2,30);
+	public void organizeKeyPoints()
+	{
+		for(KeyPoint i:keyPoint)
+		{
+			for(KeyPoint j:keyPoint)
+			{
+				if(i==j) continue;
+				if(!i.rayCast(j.getPosition()))
+				{
+					i.getAdjacent().add(keyPoint.indexOf(j));
+				}
+			}
+			//System.out.println(i.getPosition().x + " "  + i.getPosition().y);
+		}
+	}
+	public ArrayList<Vector2>findPath(Vector2 pointA, Vector2 pointB)
+	{
+		ArrayList<Vector2> path = new ArrayList<Vector2>();
+		ArrayList<Vector2> returnPath = new ArrayList<Vector2>();
+		int trace[] = new int[200];
+		final float f[] = new float[200];
+		PriorityQueue<Integer> q = new PriorityQueue<Integer>(1000, new Comparator<Integer>() {
+			public int compare(Integer p,Integer q)
+			{
+				if(f[p] - f[q]<0f)
+					return -1;
+				if(f[p] - f[q]>0f)
+					return 1;
+				return 0;
+			}
+		});
+		for(int i=0;i<keyPoint.size();++i)
+		{
+			if(!keyPoint.get(i).rayCast(pointA))
+			{
+				f[i] = pointA.dst(keyPoint.get(i).getPosition());
+				q.add(i);
+			}
+			else
+				f[i] = inf;
+			trace[i] = i;
+		}
+		while(!q.isEmpty())
+		{
+			int u = q.poll();
+			if(!keyPoint.get(u).rayCast(pointB))
+			{
+				do
+				{
+					path.add(keyPoint.get(u).getPosition());
+					u = trace[u];
+				}while(trace[u]!=u);
+				break;
+			}
+			for(Integer i: keyPoint.get(u).getAdjacent())
+			{
+				if(f[i]> f[u] + keyPoint.get(u).getPosition().dst(keyPoint.get(i).getPosition()))
+				{
+					f[i] = f[u] + keyPoint.get(u).getPosition().dst(keyPoint.get(i).getPosition());
+					trace[i] = u;
+					q.add(i);
+				}
+			}
+		}
+		for(int i = path.size()-1; i>=0; --i)
+			returnPath.add(path.get(i));
+		return returnPath;
+		
 	}
 	public void setSpawnPoint(Vector2 spawnPoint)
 	{
@@ -103,9 +181,14 @@ public class Map {
 	}
 	public void add(Object object, Class<?> objectClass)
 	{
-		Enemy enemy = (Enemy) object;
-		enemyListSize++;
-		enemyList[enemyListSize]=enemy;
+		if(object instanceof Enemy)
+		{
+			Enemy enemy = (Enemy) object;
+			enemyListSize++;
+			enemyList[enemyListSize]=enemy;
+		}
+		else
+			keyPoint.add((KeyPoint)object);
 	}
 	public Room getRoom(int id)
 	{

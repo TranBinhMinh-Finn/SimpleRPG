@@ -79,7 +79,7 @@ public class MapParserUtil {
 			{
 				RectangleMapObject r = (RectangleMapObject) object;
 				Vector2 position = new Vector2();
-				r.getRectangle().getPosition(position);
+				r.getRectangle().getCenter(position);
 				position.setLength(position.len()*mapScale);
 				if(objectClass == Player.class)
 				{
