@@ -1,4 +1,4 @@
-package com.game.entity;
+package com.game.entity.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -22,7 +22,7 @@ public class Big_Demon extends Enemy {
 	}
 
 	public Big_Demon(Vector2 position, World world ) {
-		super(position.x, position.y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-4)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED, RANGE, Enemy.melee);
+		super(position.x, position.y,FRAME_WIDTH*scale, FRAME_HEIGHT*scale,(FRAME_WIDTH-10)*scale,(FRAME_HEIGHT-6)*scale, world, MOB_hp, MOB_atk, SPEED, MOB_ANIMATION_SPEED, RANGE, Enemy.melee);
 		this.importIdleAnimation("Entity/Enemy/big_demon_idle.png", IDLE_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.importRunAnimation("Entity/Enemy/big_demon_run.png", RUN_FRAME_NUMBER, FRAME_WIDTH, FRAME_HEIGHT);
 		this.chargeMultiPlier = 1f;

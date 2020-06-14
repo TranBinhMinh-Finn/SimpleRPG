@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
@@ -12,9 +13,10 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.SimpleRPG;
 import com.game.entity.Bullet;
-import com.game.entity.Enemy;
 import com.game.entity.Player;
+import com.game.entity.enemy.Enemy;
 import com.game.map.Map;
+import com.game.screens.MainMenuScreen;
 import com.game.utils.Constants;
 
 public class GameStateManager {
@@ -30,15 +32,18 @@ public class GameStateManager {
 	//in game objects
 	private static Player player;
 	private static ArrayList<Bullet> bullets;
+	private static ArrayList<Bullet> bulletsEffects;
 	private static ArrayList<Enemy> monsterList ;
 	
 	//map and map renderer
 	private static Map map;
 	private static OrthographicCamera camera;
 	static boolean inSlow;
-	public static void init(SpriteBatch batch) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	static SimpleRPG game;
+	public static void init(SimpleRPG game) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		GameStateManager.batch = batch;
+		GameStateManager.game = game;
+		GameStateManager.batch = new SpriteBatch();
 		world = new World(new Vector2(0f,0f),false);
 		world.setContactListener(new WorldContactListener());
 		
@@ -49,19 +54,41 @@ public class GameStateManager {
 		for(int i=1;i<=map.enemyListSize;++i)
 			monsterList.add(map.enemyList[i]);
 		bullets = new ArrayList<Bullet>();
-		
+		bulletsEffects =  new ArrayList<Bullet>();
 		camera = new OrthographicCamera(SimpleRPG.WIDTH , SimpleRPG.HEIGHT);
 		camera.translate(camera.viewportWidth/2 , camera.viewportHeight/2);
 		//Setting up Box2D Debug Renderer
 		renderer = new Box2DDebugRenderer();
-		
+		SoundManager.init();
 		UIHandler.init();
+		SoundManager.playBGM();
 	}
+	private static ArrayList<Bullet> bulletsToRemove;
+	private static ArrayList<Bullet> effectsToRemove ;
+	private static ArrayList<Enemy> mobsToRemove;
+	
+	private static boolean gameOver()
+	{
+		if(player.getHP()<=0)
+			return true;
+		return false;
+	}
+	
 	public static void update(float del)
 	{	
 		// removing dead mobs / bullets landed
-		ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
-		ArrayList<Enemy> mobsToRemove = new ArrayList<Enemy>();
+		
+		if(gameOver())
+		{
+			UIHandler.update(del,player);
+			UIHandler.update(del);
+			SoundManager.stopBGM();
+			SoundManager.playGameOverBGM();
+			return ;
+		}
+		bulletsToRemove = new ArrayList<Bullet>();
+		effectsToRemove = new ArrayList<Bullet>();
+		mobsToRemove = new ArrayList<Enemy>();
 		for(Bullet i : bullets) 
 		{
 			//i.update(del);
@@ -69,6 +96,16 @@ public class GameStateManager {
 			{
 				bulletsToRemove.add(i);
 				i.dispose();
+				bulletsEffects.add(i);
+			}
+		}
+		for(Bullet i : bulletsEffects) 
+		{
+			//i.update(del);
+			if(i.removeEffect == true)
+			{
+				effectsToRemove.add(i);
+				effectsToRemove.add(i);
 			}
 		}
 		for(Enemy i : monsterList)
@@ -84,7 +121,7 @@ public class GameStateManager {
 				
 		bullets.removeAll(bulletsToRemove);
 		monsterList.removeAll(mobsToRemove);
-				
+		bulletsEffects.removeAll(effectsToRemove);
 		// calls the input handler
 				
 		InputHandler.keyHandler(del,player);
@@ -113,11 +150,22 @@ public class GameStateManager {
 		UIHandler.update(del,player);
 		//System.out.println(player.getXByPixels() + " " + player.getYByCenter());
 	}
+	public static void returnToMenu()
+	{
+		if(gameOver())
+			SoundManager.stopGameOverBGM();
+		game.getScreen().dispose();
+		game.setScreen(new MainMenuScreen(game));
+		
+	}
 	public static void render(float del)
 	{
-		
+		if(gameOver())
+		{
+			batch.setColor(Color.GRAY);
+			map.getBatch().setColor(Color.GRAY);
+		}
 		map.renderGroundLayer(); // renders the ground layer of the map
-		
 		batch.begin(); 
 		
 		batch.setProjectionMatrix(camera.combined);
@@ -125,13 +173,20 @@ public class GameStateManager {
 		for(Bullet i : bullets) {
 			i.render(batch);   //renders bullets
 		}
-		player.render(del,batch);
+		if(gameOver())
+		{
+			
+		}
+		else
+			player.render(del,batch);
 		
 		for(Enemy i : monsterList)
 		{	 //renders mobs
 			i.render(del,batch);
 		}
-		
+		for(Bullet i : bulletsEffects) {
+			i.renderEffect(batch,del);   //renders bullets effects
+		}
 		batch.end(); 
 		
 		map.renderWallLayer(); // renders the wall layer of the map
@@ -140,7 +195,12 @@ public class GameStateManager {
 		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
 		//renderer.render(world,debugMatrix);  //renders the debug Box2D world
 		
-		UIHandler.render(del);
+		if(gameOver())
+		{
+			UIHandler.gameOverRender();
+		}
+		else
+			UIHandler.render(del);
 	}
 	public static void dispose()
 	{

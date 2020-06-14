@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Entity {
 	
-	public Body body;
+	protected Body body;
 	protected float frameWidth;
 	protected float frameHeight;
 	protected float box2DWidth, box2DHeight;
@@ -43,6 +43,14 @@ public class Entity {
 	{
 		
 	}
+	public Body getBody()
+	{
+		return body;
+	}
+	public void setLinearVelocity(Vector2 vel)
+	{
+		body.setLinearVelocity(vel);
+	}
 	public float getXByPixels()
 	{
 		return (body.getPosition().x - box2DWidth)*Constants.BOX2D_SCALE;
@@ -62,6 +70,5 @@ public class Entity {
 	public void dispose()
 	{
 		this.body.getWorld().destroyBody(this.body);
-		
 	}
 }

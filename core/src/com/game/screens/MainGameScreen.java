@@ -17,7 +17,7 @@ public class MainGameScreen implements Screen {
 	public MainGameScreen(SimpleRPG game) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		batch = new SpriteBatch();
-		GameStateManager.init(game.batch);	
+		GameStateManager.init(game);	
 	}
 	
 	@Override

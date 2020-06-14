@@ -1,49 +1,72 @@
 package com.game.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.game.utils.Constants;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.handlers.SoundManager;
+import com.game.utils.Constants;
 
 public class Bullet extends Entity{
-	public static final float SPEED = 500;
-	public static final float BULLET_WIDTH = 4;
-	public static final float BULLET_HEIGHT = 12;
+	public static final float SPEED = 250;
+	public static final float BULLET_WIDTH = 22;
+	public static final float BULLET_HEIGHT = 22;
+	public static final float scale = 1.5f;
 	private static Texture texture;
 	private static TextureRegion region;
 	Vector2 vel;
+	private static Animation<TextureRegion>[] contactAnimation;
+	private static int contactFrames = 4;
+	private static boolean init = false;
+	static float animation_speed = 0.5f;
+	
+	float landingX, landingY;
+	static float duration = 2f;
+	float stateTime;
+	public boolean removeEffect;
+	private static void init()
+	{
+		if(init) return ;
+		init = true;
+		texture = new Texture("Entity/bullet.png");
+		region = new TextureRegion(texture);
+		contactAnimation = new Animation[contactFrames+7];
+		TextureRegion[][] spriteSheet = TextureRegion.split(new Texture("Entity/bulletSprite.png"), (int)BULLET_WIDTH, (int)BULLET_HEIGHT);
+		contactAnimation[contactFrames] = new Animation<TextureRegion>(animation_speed, spriteSheet[0]);
+	}
 	public Bullet(float x , float y , float target_x , float target_y, World world, short targetType) {
-		super(x, y, BULLET_WIDTH, BULLET_HEIGHT, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, (short)(targetType|Constants.BIT_WALL), (short)0);
+		super(x, y, BULLET_WIDTH * scale, BULLET_HEIGHT * scale, (BULLET_WIDTH-4)*scale, (BULLET_HEIGHT-4)*scale, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, (short)(targetType|Constants.BIT_WALL), (short)0);
 		//target_y = Gdx.graphics.getHeight() - target_y + 1;
 		remove = false;
-		if(texture == null) texture = new Texture("bullet.png");
-		if(region == null) region = new TextureRegion(texture);
+		init();
 		vel = new Vector2(target_x - x , target_y - y);
 		vel.setLength(SPEED);
 		body.setLinearVelocity(vel);
 	}
-
-	public void update(float deltaTime ) { 
-		/*x += deltaTime * speedVector.x ;
-		y += deltaTime * speedVector.y ;*/
-		body.setLinearVelocity(vel);
-		if(this.getYByCenter() >= Gdx.graphics.getHeight()) remove = true;
-		if(this.getXByCenter() >= Gdx.graphics.getWidth()) remove = true;
-		if(this.getYByCenter() < 0) remove = true;
-		if(this.getXByCenter() < 0) remove = true;
-	}
+	
 	public void contactHandle(Object object)
 	{
+		SoundManager.playExplosionSound();
 		body.setLinearVelocity(new Vector2(0,0));
+		landingX = this.getXByPixels();
+		landingY = this.getYByPixels();
 		remove = true;
 	}
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) {	
 		
-		batch.draw(texture,this.getXByPixels(),this.getYByPixels());
+		batch.draw(texture,this.getXByPixels(),this.getYByPixels(),frameWidth,frameHeight);
 	}
-	
+	public void renderEffect(SpriteBatch batch, float del)
+	{
+		stateTime +=  del*5;
+		if(stateTime > duration)
+		{
+			removeEffect = true;
+			return ;
+		}
+		batch.draw( contactAnimation[contactFrames].getKeyFrame(stateTime, true), landingX, landingY,frameWidth,frameHeight);
+	}
 }

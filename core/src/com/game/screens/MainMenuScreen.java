@@ -3,6 +3,7 @@ package com.game.screens;
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -68,14 +69,14 @@ public class MainMenuScreen implements Screen {
 		
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_exit + BUTTON_HEIGHT && Y> y_exit)
 		{
-			if(Gdx.input.isTouched())
+			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 				Gdx.app.exit();
 		}
 		game.batch.draw(button,x,y_exit,BUTTON_WIDTH,BUTTON_HEIGHT);
 		
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_start + BUTTON_HEIGHT && Y > y_start)
 		{	
-			if(Gdx.input.isTouched())
+			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
 				this.dispose();
 				try {

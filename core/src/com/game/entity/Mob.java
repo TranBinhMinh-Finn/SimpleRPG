@@ -6,24 +6,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.game.entity.enemy.Enemy;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Mob extends Entity {
-	Vector2 vel;
-	int hp;
-	int atk;
+	protected int hp;
+	protected int atk;
 	public int currentRoomId;
-	Animation<TextureRegion>[] runAnimation;
-	Animation<TextureRegion>[] idleAnimation;
-	float animation_speed;
-	float speed;
-	int runFrames;
-	int idleFrames;
-	float stateTime;
+	protected Animation<TextureRegion>[] runAnimation;
+	protected Animation<TextureRegion>[] idleAnimation;
+	protected float animation_speed;
+	protected float speed;
+	protected int runFrames;
+	protected int idleFrames;
+	protected float stateTime;
 	public boolean flip = false;
 	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		vel = new Vector2(0,0);
 		this.hp = hp;
 		this.atk = atk;
 		this.speed = speed;
@@ -31,21 +30,20 @@ public class Mob extends Entity {
 	}
 	public Mob(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, box2DWidth, box2DHeight, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		vel = new Vector2(0,0);
 		this.hp = hp;
 		this.atk = atk;
 		this.speed = speed;
 		this.animation_speed = animation_speed;
 	}
 	
-	void importIdleAnimation(String s, int idleFrames,int frameWidth, int frameHeight)
+	protected void importIdleAnimation(String s, int idleFrames,int frameWidth, int frameHeight)
 	{
 		this.idleFrames = idleFrames;
 		idleAnimation = new Animation[idleFrames+7];
 		TextureRegion[][] idleSpriteSheet = TextureRegion.split(new Texture(s), frameWidth, frameHeight);
 		idleAnimation[idleFrames] = new Animation<TextureRegion>(animation_speed, idleSpriteSheet[0]);
 	}
-	void importRunAnimation(String s, int runFrames,int frameWidth, int frameHeight)
+	protected void importRunAnimation(String s, int runFrames,int frameWidth, int frameHeight)
 	{
 		this.runFrames = runFrames;
 		runAnimation = new Animation[runFrames+7];
@@ -78,9 +76,14 @@ public class Mob extends Entity {
 		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
+			/*Bullet bullet = (Bullet) object;
+			Vector2 force = bullet.body.getLinearVelocity();
+			force.setLength(speed*5);
+			body.applyForce(force, this.body.getPosition(), true);*/
 			hp -= 10;
 			if(hp == 0)
 				remove = true;
+			
 		}
 		if(object instanceof Enemy)
 		{
@@ -97,7 +100,7 @@ public class Mob extends Entity {
 				e.charging = false;
 				e.body.setLinearVelocity(new Vector2());
 				/*Vector2 force = e.body.getLinearVelocity();
-				force.setLength(speed*5);
+				force.setLength(speed*100);
 				body.applyForce(force, this.body.getPosition(), true);*/
 			}
 		}

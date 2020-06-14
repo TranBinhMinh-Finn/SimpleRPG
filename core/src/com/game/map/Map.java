@@ -1,26 +1,23 @@
 package com.game.map;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.game.entity.Big_Demon;
-import com.game.entity.Chort;
-import com.game.entity.Enemy;
 import com.game.entity.Player;
-import com.game.entity.Wogol;
+import com.game.entity.enemy.Big_Demon;
+import com.game.entity.enemy.Chort;
+import com.game.entity.enemy.Enemy;
+import com.game.entity.enemy.Imp;
+import com.game.entity.enemy.Wogol;
 import com.game.utils.MapParserUtil;
 
 public class Map {
-	private ArrayList<Wall> walls;
-	private ArrayList<River> rivers;
-	private ArrayList<Room> rooms;
-	
 	Wall[] wallList;
 	River[] riverList;
 	Room[] roomList;
@@ -63,6 +60,7 @@ public class Map {
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("BigDemon").getObjects(),mapScale, Big_Demon.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Wogol").getObjects(),mapScale, Wogol.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Chort").getObjects(),mapScale, Chort.class,this);
+		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Imp").getObjects(),mapScale, Imp.class,this);
 		organizeMobs();
 	}
 	void organizeMobs()
@@ -120,6 +118,10 @@ public class Map {
 	public void setCamera(OrthographicCamera camera)
 	{
 		tmr.setView(camera);
+	}
+	public Batch getBatch()
+	{
+		return tmr.getBatch();
 	}
 	public void renderGroundLayer()
 	{

@@ -1,10 +1,17 @@
-package com.game.entity;
+package com.game.entity.enemy;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.entity.Bullet;
+import com.game.entity.Mob;
+import com.game.entity.Player;
+import com.game.handlers.SoundManager;
+import com.game.map.Wall;
 import com.game.utils.Constants;
 
 public class Enemy extends Mob {
@@ -53,6 +60,8 @@ public class Enemy extends Mob {
 			return true;
 		return false;
 	}
+	
+	
 	public void actionQuery(Player player, float del)
 	{
 		if(aggroCheck(player)==false)
@@ -95,7 +104,7 @@ public class Enemy extends Mob {
 	}
 	void charge(float x, float y)
 	{
-		vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
+		Vector2 vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
 		vel.setLength(speed*100*chargeMultiPlier);
 		this.body.setLinearVelocity(vel);
 		charging = true;
@@ -103,12 +112,29 @@ public class Enemy extends Mob {
 	
 	void move(float x, float y)
 	{
-		vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
+		RayCastCallback callback = new RayCastCallback()
+			{
+
+				@Override
+				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+					Object object = fixture.getUserData();
+					if((object instanceof Enemy) || (object instanceof Bullet))
+						return -1;
+					if(object instanceof Wall)
+					{
+						
+					}
+					return 0;
+				}
+				
+			};
+		Vector2 vel = new Vector2(x - this.getXByCenter() , y - this.getYByCenter());
 		vel.setLength(speed);
 		this.body.setLinearVelocity(vel);
 	}
 	void shoot(float x, float y, ArrayList<Bullet> bullets)
 	{
+		SoundManager.playGunShotSound();
 		bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , x, y, this.body.getWorld(),Constants.BIT_PLAYER));
 	}
 	public void contactHandle(Object object)
@@ -170,7 +196,7 @@ public class Enemy extends Mob {
 				break;
 			}
 		}
-		vel = new Vector2(velX,velY);
+		Vector2 vel = new Vector2(velX,velY);
 		vel.setLength(speed);
 		this.body.setLinearVelocity(vel);
 	}

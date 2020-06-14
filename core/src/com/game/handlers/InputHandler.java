@@ -37,18 +37,19 @@ public class InputHandler {
 		}
 		Vector2 vel = new Vector2(velX,velY);
 		vel.setLength(Player.SPEED*del*50 * player.slowed);
-		player.body.setLinearVelocity(vel);
+		player.setLinearVelocity(vel);
 	}
 	
 	public static void mouseClickHandler(float del, Player player, ArrayList<Bullet> bullets, OrthographicCamera camera)
 	{	
 		if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+			SoundManager.playGunShotSound();
 			float X = Gdx.input.getX();
 			float Y = Gdx.input.getY();
 			
 			Vector3 touchPos = new Vector3(X,Y,0); 
 			touchPos = camera.unproject(touchPos);
-			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.body.getWorld(),Constants.BIT_ENEMY));
+			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.getBody().getWorld(),Constants.BIT_ENEMY));
 		}
 	}
 }
