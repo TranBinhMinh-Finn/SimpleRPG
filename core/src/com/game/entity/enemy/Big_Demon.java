@@ -10,7 +10,7 @@ public class Big_Demon extends Enemy {
 	private static final float MOB_ANIMATION_SPEED = 1f;
 	private static final float SPEED = 30;
 	private static final int MOB_hp = 200;
-	private static final int MOB_atk = 5;
+	private static final int MOB_atk = 25;
 	private static final int IDLE_FRAME_NUMBER = 4;
 	private static final int RUN_FRAME_NUMBER = 4;
 	private static final float RANGE = 1000;

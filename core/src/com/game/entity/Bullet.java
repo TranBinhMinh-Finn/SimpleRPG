@@ -22,7 +22,7 @@ public class Bullet extends Entity{
 	private static int contactFrames = 4;
 	private static boolean init = false;
 	static float animation_speed = 0.5f;
-	
+	public float damage;
 	float landingX, landingY;
 	static float duration = 2f;
 	float stateTime;
@@ -37,9 +37,10 @@ public class Bullet extends Entity{
 		TextureRegion[][] spriteSheet = TextureRegion.split(new Texture("Entity/bulletSprite.png"), (int)BULLET_WIDTH, (int)BULLET_HEIGHT);
 		contactAnimation[contactFrames] = new Animation<TextureRegion>(animation_speed, spriteSheet[0]);
 	}
-	public Bullet(float x , float y , float target_x , float target_y, World world, short targetType) {
+	public Bullet(float x , float y , float target_x , float target_y, World world, short targetType, float damage) {
 		super(x, y, BULLET_WIDTH * scale, BULLET_HEIGHT * scale, (BULLET_WIDTH-4)*scale, (BULLET_HEIGHT-4)*scale, BodyType.DynamicBody, "Box", world, Constants.BIT_BULLET, (short)(targetType|Constants.BIT_WALL), (short)0);
 		//target_y = Gdx.graphics.getHeight() - target_y + 1;
+		this.damage = damage;
 		remove = false;
 		init();
 		vel = new Vector2(target_x - x , target_y - y);

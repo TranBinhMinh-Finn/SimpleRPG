@@ -49,7 +49,7 @@ public class InputHandler {
 			
 			Vector3 touchPos = new Vector3(X,Y,0); 
 			touchPos = camera.unproject(touchPos);
-			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.getBody().getWorld(),Constants.BIT_ENEMY));
+			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.getBody().getWorld(),Constants.BIT_ENEMY,player.getAtk()));
 		}
 	}
 }

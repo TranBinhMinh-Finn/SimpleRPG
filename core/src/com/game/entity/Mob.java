@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.game.entity.enemy.Enemy;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.entity.enemy.Enemy;
+import com.game.utils.Constants;
 
 public class Mob extends Entity {
-	protected int hp;
-	protected int atk;
+	protected float hp;
+	private float atk;
 	public int currentRoomId;
 	protected Animation<TextureRegion>[] runAnimation;
 	protected Animation<TextureRegion>[] idleAnimation;
@@ -23,16 +24,16 @@ public class Mob extends Entity {
 	public boolean flip = false;
 	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		this.hp = hp;
-		this.atk = atk;
-		this.speed = speed;
+		this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
+		this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
+		this.speed = speed * Constants.DIFFICULTY_MULTIPLIER;
 		this.animation_speed = animation_speed;
 	}
 	public Mob(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, box2DWidth, box2DHeight, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		this.hp = hp;
-		this.atk = atk;
-		this.speed = speed;
+		this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
+		this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
+		this.speed = speed * Constants.DIFFICULTY_MULTIPLIER;
 		this.animation_speed = animation_speed;
 	}
 	
@@ -72,7 +73,12 @@ public class Mob extends Entity {
 	}
 	public void contactHandle(Object object)
 	{
-		this.body.setLinearVelocity(new Vector2());
+		
+		/*if(object instanceof Entity)
+		{
+			Entity e = (Entity) object;
+			this.body.setLinearVelocity(e.getBody().getLinearVelocity());
+		}*/
 		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
@@ -99,13 +105,18 @@ public class Mob extends Entity {
 				}
 				e.charging = false;
 				e.body.setLinearVelocity(new Vector2());
+				
 				/*Vector2 force = e.body.getLinearVelocity();
 				force.setLength(speed*100);
 				body.applyForce(force, this.body.getPosition(), true);*/
 			}
 		}
 	}
-	public int getHP()
+	public float getAtk()
+	{
+		return atk;
+	}
+	public float getHP()
 	{
 		return hp;
 	}

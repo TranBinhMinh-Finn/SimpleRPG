@@ -135,7 +135,7 @@ public class Enemy extends Mob {
 	void shoot(float x, float y, ArrayList<Bullet> bullets)
 	{
 		SoundManager.playGunShotSound();
-		bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , x, y, this.body.getWorld(),Constants.BIT_PLAYER));
+		bullets.add(new Bullet(this.getXByCenter()  , this.getYByCenter()   , x, y, this.body.getWorld(),Constants.BIT_PLAYER, this.getAtk()));
 	}
 	public void contactHandle(Object object)
 	{
