@@ -20,8 +20,8 @@ public class Entity {
 	public Entity(float x, float y, float pixelWidth, float pixelHeight, BodyType bodyType,String shapeType, World world, short cBits, short mBits, short gIndex) 
 	{
 		remove = false;
-		float X = (x+pixelWidth/2f)/Constants.BOX2D_SCALE;
-		float Y = (y+pixelHeight/2f)/Constants.BOX2D_SCALE;
+		float X = x/Constants.BOX2D_SCALE;
+		float Y = y/Constants.BOX2D_SCALE;
 		this.frameWidth = pixelWidth;
 		this.frameHeight = pixelHeight;
 		this.box2DWidth = pixelWidth/(2*Constants.BOX2D_SCALE);
@@ -30,8 +30,8 @@ public class Entity {
 	}
 	public Entity(float x, float y, float pixelWidth, float pixelHeight,float box2DWidth,float box2DHeight, BodyType bodyType, String shapeType, World world, short cBits, short mBits, short gIndex) 
 	{
-		float X = (x+pixelWidth/2f)/Constants.BOX2D_SCALE;
-		float Y = (y+pixelHeight/2f)/Constants.BOX2D_SCALE;
+		float X = x/Constants.BOX2D_SCALE;
+		float Y = y/Constants.BOX2D_SCALE;
 		this.frameWidth = pixelWidth;
 		this.frameHeight = pixelHeight;
 		this.box2DWidth = box2DWidth/(2*Constants.BOX2D_SCALE);

@@ -33,8 +33,9 @@ public class MainGameScreen implements Screen {
 		Gdx.gl.glClearColor(0.15f, 0.05f, 0.05f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		GameStateManager.update(del);
+		
 		GameStateManager.render(del);
+		GameStateManager.update(del);
 	}
 
 	@Override

@@ -75,6 +75,8 @@ public class GameStateManager {
 	
 	private static boolean gameOver()
 	{
+		if(player.currentRoomId == 4)
+			return true;
 		if(player.getHP()<=0)
 			return true;
 		return false;
@@ -113,7 +115,7 @@ public class GameStateManager {
 				effectsToRemove.add(i);
 			}
 		}
-		for(Enemy i : monsterList)
+		/*for(Enemy i : monsterList)
 		{
 			if(i.remove)
 			{
@@ -121,7 +123,7 @@ public class GameStateManager {
 				map.getRoom(i.currentRoomId).enemyCount--;
 				mobsToRemove.add(i);
 			}
-		}
+		}*/
 				
 				
 		bullets.removeAll(bulletsToRemove);
@@ -177,13 +179,8 @@ public class GameStateManager {
 		
 		for(Bullet i : bullets) {
 			i.render(batch);   //renders bullets
-		}
-		if(gameOver())
-		{
-			
-		}
-		else
-			player.render(del,batch);
+		}			
+		player.render(del,batch);
 		
 		for(Enemy i : monsterList)
 		{	 //renders mobs
