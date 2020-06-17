@@ -115,7 +115,7 @@ public class GameStateManager {
 				effectsToRemove.add(i);
 			}
 		}
-		/*for(Enemy i : monsterList)
+		for(Enemy i : monsterList)
 		{
 			if(i.remove)
 			{
@@ -123,7 +123,7 @@ public class GameStateManager {
 				map.getRoom(i.currentRoomId).enemyCount--;
 				mobsToRemove.add(i);
 			}
-		}*/
+		}
 				
 				
 		bullets.removeAll(bulletsToRemove);
@@ -205,7 +205,8 @@ public class GameStateManager {
 		/*debugMatrix = new Matrix4(camera.combined);     
 		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
 		renderer.render(world,debugMatrix);  //renders the debug Box2D world
-		
+		*/
+		/*
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		shapeRenderer.setProjectionMatrix(debugMatrix);
 		if(!line.isEmpty())
