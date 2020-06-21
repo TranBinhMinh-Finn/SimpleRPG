@@ -30,7 +30,7 @@ public class CameraStyles {
 		player.currentRoomId = 0;
 		for(int i = 1 ; i <= map.roomListSize ; ++i) {
 			Room room =  map.getRoom(i);
-			if(room.inRoom(player.getXByPixels() , player.getYByPixels())== true) 
+			if(room.inRoom(player.getXByPixels() , player.getYByPixels())== true && room.inRoom(player.getXByPixels() + player.getFrameWidth(), player.getYByPixels() + player.getFrameHeight())) 
 			{
 				//System.out.println("check in room :" + i);
 				player.currentRoomId = i;

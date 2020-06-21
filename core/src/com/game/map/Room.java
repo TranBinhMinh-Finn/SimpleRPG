@@ -23,12 +23,13 @@ public class Room {
 		float y = target.y - bottomLeft.y;
 		if(0 <= x && x <= size.x && 0 <= y && y <= size.y) 
 			return true;
-		else return false;
+		return false;
 	}
 	public boolean inRoom(float p , float q ) {
 		float x = p - bottomLeft.x;
 		float y = q - bottomLeft.y;
-		if(0 <= x && x <= size.x && 0 <= y && y <= size.y) return true;
-		else return false;
+		if(0 <= x && size.x - x >=-10f && 0 <= y && size.y - y >= -10f) 
+			return true;
+		return false;
 	}
 }

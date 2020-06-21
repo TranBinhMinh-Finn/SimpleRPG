@@ -1,7 +1,6 @@
 package com.game.entity.enemy;
 
 import java.util.ArrayList;
-import java.util.*;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
@@ -9,11 +8,12 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.entity.Bullet;
-import com.game.entity.Entity;
 import com.game.entity.Mob;
 import com.game.entity.Player;
 import com.game.handlers.GameStateManager;
 import com.game.handlers.SoundManager;
+import com.game.map.River;
+import com.game.map.Wall;
 import com.game.utils.Constants;
 
 public class Enemy extends Mob {
@@ -34,7 +34,7 @@ public class Enemy extends Mob {
 		this.range = range;
 		this.type = type;
 		Random random = new Random();
-		attackWaitTime/=random.ints(0,20).findFirst().getAsInt();
+		attackWaitTime=attackDelay;
 		path = new ArrayList<Vector2>();
 	}
 	public Enemy(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, float range, int type)
@@ -49,7 +49,7 @@ public class Enemy extends Mob {
 	{
 		if(this.currentRoomId == player.currentRoomId)
 		{
-			Vector2 distance = new Vector2(player.getXByCenter() - this.getXByCenter(), player.getYByCenter() - this.getYByCenter());
+			//Vector2 distance = new Vector2(player.getXByCenter() - this.getXByCenter(), player.getYByCenter() - this.getYByCenter());
 			//if(distance.len()<100f)
 			return true;
 		}
@@ -85,12 +85,12 @@ public class Enemy extends Mob {
 		
 				@Override
 			public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-					if(fixture.getUserData() instanceof Entity)
+					if(fixture.getUserData() instanceof Wall || fixture.getUserData() instanceof River)
 					{
-						return -1;
+						obstruct = true;
+						return 0;
 					}
-					obstruct = true;
-					return 0;
+					return -1;
 			}
 	};
 	private boolean rayCast(Vector2 point1, Vector2 point2, World world)
@@ -111,10 +111,14 @@ public class Enemy extends Mob {
 	public void actionQuery(Player player, float del)
 	{
 		if(aggroCheck(player)==false)
+		{
+			body.setLinearVelocity(new Vector2());
 			return;
+		}
+		//System.out.println("melee enemy aggroed");
 		if(charging)
 			return ;
-		attackWaitTime -= del;
+		attackWaitTime -= del*3;
 		if(!path.isEmpty())
 		{
 			if(body.getPosition().dst(path.get(0))<30f)
@@ -129,6 +133,7 @@ public class Enemy extends Mob {
 			findPath();
 		else 
 		{
+			//System.out.println("melee enemy unobstructed");
 			if(attackWaitTime > 0)
 			{
 				randomActionQuery(del);
@@ -146,7 +151,11 @@ public class Enemy extends Mob {
 	public void actionQuery(Player player, ArrayList<Bullet> bullets, float del)
 	{
 		if(aggroCheck(player)==false)
+		{
+			body.setLinearVelocity(new Vector2());
 			return;
+		}
+		//System.out.println("ranged enemy aggroed");
 		if(!path.isEmpty())
 		{
 			if(body.getPosition().dst(path.get(0))<30f)
@@ -161,6 +170,7 @@ public class Enemy extends Mob {
 			findPath();
 		else 
 		{
+			//System.out.println("ranged enemy unobstructed");
 			attackWaitTime -= del*5;
 			if(attackWaitTime > 0)
 			{
@@ -205,13 +215,16 @@ public class Enemy extends Mob {
 			if(hp == 0)
 				remove = true;
 		}
-		if(charging == true)
+		else
 		{
-			charging = false;
+			if(charging == true)
+			{
+				charging = false;
+			}
 		}
 	}
 	private int lastActionX = 0,lastActionY = 0, lastRepeats = 0;
-	private static final int limitActions = 100;
+	private static final int limitActions = 30;
 	public void randomActionQuery(float del)
 	{
 		int moveX;

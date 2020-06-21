@@ -67,8 +67,22 @@ public class Entity {
 	{
 		return body.getPosition().y * Constants.BOX2D_SCALE;
 	}
+	
+	public float getFrameWidth() {
+		return frameWidth;
+	}
+	public void setFrameWidth(float frameWidth) {
+		this.frameWidth = frameWidth;
+	}
+	public float getFrameHeight() {
+		return frameHeight;
+	}
+	public void setFrameHeight(float frameHeight) {
+		this.frameHeight = frameHeight;
+	}
 	public void dispose()
 	{
 		this.body.getWorld().destroyBody(this.body);
 	}
+	
 }

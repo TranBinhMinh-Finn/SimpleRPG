@@ -98,7 +98,7 @@ public class GameStateManager {
 		{
 			UIHandler.update(del);
 			SoundManager.stopBGM();
-			
+			SoundManager.playWinBGM();
 			return ;
 		}
 		bulletsToRemove = new ArrayList<Bullet>();
@@ -168,6 +168,8 @@ public class GameStateManager {
 	{
 		if(gameOver())
 			SoundManager.stopGameOverBGM();
+		if(winCondition())
+			SoundManager.stopWinBGM();
 		game.getScreen().dispose();
 		game.setScreen(new MainMenuScreen(game));
 		
@@ -210,11 +212,11 @@ public class GameStateManager {
 			UIHandler.gameOverRender(" Victory! ", Color.CORAL);
 		else
 			UIHandler.render(del);
-		
-		/*debugMatrix = new Matrix4(camera.combined);     
+		/*
+		debugMatrix = new Matrix4(camera.combined);     
 		debugMatrix.scale(Constants.BOX2D_SCALE, Constants.BOX2D_SCALE, 1);
 		renderer.render(world,debugMatrix);  //renders the debug Box2D world
-		*/
+		
 		/*
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		shapeRenderer.setProjectionMatrix(debugMatrix);

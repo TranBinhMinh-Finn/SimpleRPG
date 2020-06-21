@@ -30,12 +30,12 @@ public class KeyPoint {
 			
 					@Override
 				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-				if(fixture.getUserData() instanceof Entity)
-				{
-					return -1;
-				}
-					KeyPoint.this.obstruct = true;
-					return 0;
+						if(fixture.getUserData() instanceof Wall || fixture.getUserData() instanceof River)
+						{
+							obstruct = true;
+							return 0;
+						}
+						return -1;
 				}
 		};
 	}

@@ -49,7 +49,7 @@ public class Map {
 		enemyList= new Enemy[100];
 		spawnPoint = new Vector2();
 		keyPoint = new ArrayList<KeyPoint>();
-		map = new TmxMapLoader().load("Maps/map.tmx");
+		map = new TmxMapLoader().load("Maps/dungeonMap.tmx");
 		tmr = new OrthogonalTiledMapRenderer(map,mapScale);
 		wallIndices = new int[] {
 				map.getLayers().getIndex("WallTiles"),
