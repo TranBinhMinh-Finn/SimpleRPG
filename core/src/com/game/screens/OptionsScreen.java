@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.game.SimpleRPG;
+import com.game.handlers.SoundManager;
 import com.game.utils.Constants;
 
 
@@ -69,17 +70,27 @@ public class OptionsScreen implements Screen {
 		{
 			this.dispose();
 			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+			{
 				game.setScreen(new MainMenuScreen(game));
+				SoundManager.playButtonSound();
+			}
 		}
-		
 		
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_easy + BUTTON_HEIGHT && Y > y_easy)
 		{	
-			Constants.DIFFICULTY_MULTIPLIER = Constants.EASY_MULTIPLIER;
+			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+			{
+				SoundManager.playButtonSound();
+				Constants.DIFFICULTY_MULTIPLIER = Constants.EASY_MULTIPLIER;
+			}
 		}
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_hard + BUTTON_HEIGHT && Y > y_hard)
 		{	
-			Constants.DIFFICULTY_MULTIPLIER = Constants.HARD_MULTIPLIER;
+			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+			{
+				SoundManager.playButtonSound();
+				Constants.DIFFICULTY_MULTIPLIER = Constants.HARD_MULTIPLIER;
+			}
 		}
 		game.batch.draw(button,x,y_easy,BUTTON_WIDTH,BUTTON_HEIGHT);
 		game.batch.draw(button,x,y_hard,BUTTON_WIDTH,BUTTON_HEIGHT);

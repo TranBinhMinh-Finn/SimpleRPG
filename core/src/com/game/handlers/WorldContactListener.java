@@ -5,8 +5,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.game.entity.Chest;
 import com.game.entity.Entity;
-import com.game.entity.Mob;
 import com.game.entity.enemy.Enemy;
 
 public class WorldContactListener implements ContactListener {
@@ -64,7 +64,18 @@ public class WorldContactListener implements ContactListener {
 		if(a.getUserData() == null || b.getUserData() == null) return ;
 		Object objectA = a.getUserData();
 		Object objectB = b.getUserData();
-		
+		if(objectA instanceof Chest)
+		{
+			Chest c = (Chest) objectA;
+			c.endContact(objectB);
+			return ;
+		}
+		if(objectB instanceof Chest)
+		{
+			Chest c = (Chest) objectB;
+			c.endContact(objectA);
+			return ;
+		}
 	}
 
 	@Override

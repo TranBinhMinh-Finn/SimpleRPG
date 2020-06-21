@@ -34,7 +34,7 @@ public class UIHandler {
 	static Texture background;
 	static OrthographicCamera gameOverCamera;
 	static SpriteBatch batch;
-	private static BitmapFont font_black, font_red;
+	private static BitmapFont font_black, font_end;
 	
 	public static void init()
 	{
@@ -62,8 +62,7 @@ public class UIHandler {
 		font_black = generator.generateFont(parameter);
 		font_black.setColor(0f, 0f, 0f, 1f);
 		parameter.size = 200;
-		font_red = generator.generateFont(parameter);
-		font_red.setColor(1f, 0f, 0f, 1f);
+		font_end = generator.generateFont(parameter);
 		generator.dispose();
 		
 		gameOverCamera = new OrthographicCamera(SimpleRPG.WIDTH ,SimpleRPG.HEIGHT);
@@ -110,16 +109,18 @@ public class UIHandler {
 		{
 			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
+				SoundManager.playButtonSound();
 				GameStateManager.returnToMenu();
 			}
 		}
 		
 	}
-	public static void gameOverRender()
+	public static void gameOverRender(String s, Color color)
 	{
 		batch.begin();
 		batch.draw(button,x,y,BUTTON_WIDTH,BUTTON_HEIGHT);
-		font_red.draw(batch, "Game Over", SimpleRPG.WIDTH/2 - 230 ,y + 250);
+		font_end.setColor(color);
+		font_end.draw(batch, s, SimpleRPG.WIDTH/2 - 230 ,y + 250);
 		font_black.draw(batch, "Menu", x + 150 ,y + 100);
 		batch.end();
 	}

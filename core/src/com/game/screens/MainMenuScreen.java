@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.game.SimpleRPG;
+import com.game.handlers.SoundManager;
 
 
 public class MainMenuScreen implements Screen {
@@ -69,14 +70,17 @@ public class MainMenuScreen implements Screen {
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_exit + BUTTON_HEIGHT && Y> y_exit)
 		{
 			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+			{
 				Gdx.app.exit();
+				SoundManager.playButtonSound();
+			}
 		}
-		
 		
 		if(X < x + BUTTON_WIDTH && X> x && Y < y_start + BUTTON_HEIGHT && Y > y_start)
 		{	
 			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
+				SoundManager.playButtonSound();
 				this.dispose();
 				try {
 					game.setScreen(new MainGameScreen(game));
@@ -90,6 +94,7 @@ public class MainMenuScreen implements Screen {
 		{	
 			if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
+				SoundManager.playButtonSound();
 				this.dispose();
 				game.setScreen(new OptionsScreen(game));
 			}

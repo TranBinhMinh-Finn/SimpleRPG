@@ -51,5 +51,13 @@ public class InputHandler {
 			touchPos = camera.unproject(touchPos);
 			bullets.add(new Bullet(player.getXByCenter()  , player.getYByCenter()   , touchPos.x, touchPos.y, player.getBody().getWorld(),Constants.BIT_ENEMY,player.getAtk()));
 		}
+		if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT))
+		{
+			if(GameStateManager.getMap().chest.touching)
+			{
+				if(!GameStateManager.getMap().chest.open) SoundManager.playChestOpenSound();
+				GameStateManager.getMap().chest.open = true;
+			}
+		}
 	}
 }

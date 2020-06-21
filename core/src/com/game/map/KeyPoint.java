@@ -42,6 +42,8 @@ public class KeyPoint {
 	public boolean rayCast(Vector2 point2)
 	{
 		obstruct = false;
+		if(position.epsilonEquals(point2))
+			return false;
 		world.rayCast(callback, position, point2);
 		//GameStateManager.line.add(position);
 		//GameStateManager.line.add(point2);

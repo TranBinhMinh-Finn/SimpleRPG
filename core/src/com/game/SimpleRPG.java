@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.game.handlers.SoundManager;
 import com.game.screens.MainMenuScreen;
 
 public class SimpleRPG extends Game {
@@ -19,6 +20,7 @@ public class SimpleRPG extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		this.setScreen(new MainMenuScreen(this));
+		SoundManager.init();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("UI/Awkward.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 100;

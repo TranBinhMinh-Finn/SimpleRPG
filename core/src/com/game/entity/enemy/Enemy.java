@@ -27,9 +27,6 @@ public class Enemy extends Mob {
 	float attackWaitTime = attackDelay;
 	float chargeMultiPlier;
 	
-	boolean obstruct = false;
-	RayCastCallback callback;
-	
 	ArrayList<Vector2> path;
 	public Enemy(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, float range,int type)
 	{	
@@ -39,19 +36,6 @@ public class Enemy extends Mob {
 		Random random = new Random();
 		attackWaitTime/=random.ints(0,20).findFirst().getAsInt();
 		path = new ArrayList<Vector2>();
-		callback = new RayCastCallback()
-		{
-			
-					@Override
-				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-				if(fixture.getUserData() instanceof Entity)
-				{
-					return -1;
-				}
-					Enemy.this.obstruct = true;
-					return 0;
-				}
-		};
 	}
 	public Enemy(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, float range, int type)
 	{	
@@ -59,19 +43,7 @@ public class Enemy extends Mob {
 		this.type = type;
 		this.range = range;
 		path = new ArrayList<Vector2>();
-		callback = new RayCastCallback()
-		{
-			
-					@Override
-				public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-						if(fixture.getUserData() instanceof Entity)
-						{
-							return -1;
-						}
-						Enemy.this.obstruct = true;
-						return 0;
-				}
-		};
+		
 	}
 	boolean aggroCheck(Player player)
 	{
@@ -107,9 +79,25 @@ public class Enemy extends Mob {
 		}
 		System.out.println("---------------------");*/
 	}
+	public boolean obstruct;
+	RayCastCallback callback = new RayCastCallback()
+	{
+		
+				@Override
+			public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+					if(fixture.getUserData() instanceof Entity)
+					{
+						return -1;
+					}
+					obstruct = true;
+					return 0;
+			}
+	};
 	private boolean rayCast(Vector2 point1, Vector2 point2, World world)
 	{
 		obstruct = false;
+		if(point1.epsilonEquals(point2))
+			return false;
 		world.rayCast(callback, point1, point2);
 		//GameStateManager.line.add(point1);
 		//GameStateManager.line.add(point2);

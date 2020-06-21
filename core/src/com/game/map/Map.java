@@ -12,13 +12,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.entity.Chest;
 import com.game.entity.Player;
 import com.game.entity.enemy.Big_Demon;
 import com.game.entity.enemy.Chort;
 import com.game.entity.enemy.Enemy;
 import com.game.entity.enemy.Imp;
 import com.game.entity.enemy.Wogol;
-import com.game.handlers.GameStateManager;
 import com.game.utils.MapParserUtil;
 
 public class Map {
@@ -28,6 +28,7 @@ public class Map {
 	public Slow[] slowList;
 	public Enemy[] enemyList;
 	ArrayList<KeyPoint> keyPoint;
+	public Chest chest;
 	int wallListSize;
 	int riverListSize;
 	public int roomListSize;
@@ -68,6 +69,7 @@ public class Map {
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Chort").getObjects(),mapScale, Chort.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Imp").getObjects(),mapScale, Imp.class,this);
 		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("KeyPoint").getObjects(),mapScale, KeyPoint.class,this);
+		MapParserUtil.parseTiledObjectLayer(world, map.getLayers().get("Chest").getObjects(),mapScale, Chest.class,this);
 		organizeMobs();
 		organizeKeyPoints();
 	}
@@ -187,8 +189,10 @@ public class Map {
 			enemyListSize++;
 			enemyList[enemyListSize]=enemy;
 		}
-		else
+		if(object instanceof KeyPoint)
 			keyPoint.add((KeyPoint)object);
+		if(object instanceof Chest)
+			chest = (Chest) object;
 	}
 	public Room getRoom(int id)
 	{

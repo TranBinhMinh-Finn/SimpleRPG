@@ -63,7 +63,6 @@ public class GameStateManager {
 		camera.translate(camera.viewportWidth/2 , camera.viewportHeight/2);
 		//Setting up Box2D Debug Renderer
 		renderer = new Box2DDebugRenderer();
-		SoundManager.init();
 		UIHandler.init();
 		SoundManager.playBGM();
 		
@@ -72,11 +71,12 @@ public class GameStateManager {
 	private static ArrayList<Bullet> bulletsToRemove;
 	private static ArrayList<Bullet> effectsToRemove ;
 	private static ArrayList<Enemy> mobsToRemove;
-	
+	private static boolean winCondition()
+	{
+		return map.chest.done;
+	}
 	private static boolean gameOver()
 	{
-		if(player.currentRoomId == 4)
-			return true;
 		if(player.getHP()<=0)
 			return true;
 		return false;
@@ -92,6 +92,13 @@ public class GameStateManager {
 			UIHandler.update(del);
 			SoundManager.stopBGM();
 			SoundManager.playGameOverBGM();
+			return ;
+		}
+		if(winCondition())
+		{
+			UIHandler.update(del);
+			SoundManager.stopBGM();
+			
 			return ;
 		}
 		bulletsToRemove = new ArrayList<Bullet>();
@@ -167,7 +174,7 @@ public class GameStateManager {
 	}
 	public static void render(float del)
 	{
-		if(gameOver())
+		if(gameOver() || winCondition())
 		{
 			batch.setColor(Color.GRAY);
 			map.getBatch().setColor(Color.GRAY);
@@ -181,6 +188,8 @@ public class GameStateManager {
 			i.render(batch);   //renders bullets
 		}			
 		player.render(del,batch);
+		
+		map.chest.render(del, batch);
 		
 		for(Enemy i : monsterList)
 		{	 //renders mobs
@@ -196,9 +205,9 @@ public class GameStateManager {
 		
 		
 		if(gameOver())
-		{
-			UIHandler.gameOverRender();
-		}
+			UIHandler.gameOverRender("Game Over", Color.RED);
+		else if(winCondition())
+			UIHandler.gameOverRender(" Victory! ", Color.CORAL);
 		else
 			UIHandler.render(del);
 		

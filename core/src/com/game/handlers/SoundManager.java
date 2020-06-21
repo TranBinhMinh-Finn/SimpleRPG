@@ -8,12 +8,16 @@ public class SoundManager {
 	private static Sound BGM;
 	private static Sound explosion;
 	private static Sound gameOver;
-	static void init()
+	private static Sound chestOpen;
+	private static Sound button;
+	public static void init()
 	{
 		gunShot = Gdx.audio.newSound(Gdx.files.internal("Audio/gunshot.wav"));
 		explosion = Gdx.audio.newSound(Gdx.files.internal("Audio/explosion.wav"));
 		BGM = Gdx.audio.newSound(Gdx.files.internal("Audio/BGM.ogg"));
 		gameOver = Gdx.audio.newSound(Gdx.files.internal("Audio/gameover.ogg"));
+		chestOpen = Gdx.audio.newSound(Gdx.files.internal("Audio/chest-opening.mp3"));
+		button = Gdx.audio.newSound(Gdx.files.internal("Audio/button.wav"));
 	}
 	public static void playGunShotSound()
 	{
@@ -32,6 +36,10 @@ public class SoundManager {
 	{
 		BGM.stop();
 	}
+	public static void playChestOpenSound()
+	{
+		chestOpen.play();
+	}
 	static boolean playing = false;
 	public static void playGameOverBGM()
 	{
@@ -43,5 +51,9 @@ public class SoundManager {
 	public static void stopGameOverBGM()
 	{
 		gameOver.stop();
+	}
+	public static void playButtonSound()
+	{
+		button.play(1f, 1f, 0f);
 	}
 }
