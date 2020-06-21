@@ -10,7 +10,7 @@ public class Imp extends Enemy {
 	private static final float MOB_ANIMATION_SPEED = 1f;
 	private static final float SPEED = 40;
 	private static final int MOB_hp = 20;
-	private static final int MOB_atk = 5;
+	private static final int MOB_atk = 15;
 	private static final int IDLE_FRAME_NUMBER = 4;
 	private static final int RUN_FRAME_NUMBER = 4;
 	private static final float RANGE = 300;

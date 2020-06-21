@@ -24,16 +24,34 @@ public class Mob extends Entity {
 	public boolean flip = false;
 	public Mob(float x, float y, float w, float h, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
-		this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
-		this.speed = speed * Constants.DIFFICULTY_MULTIPLIER;
+		if(this instanceof Player)
+		{
+			this.hp = hp;
+			this.atk = atk ;
+			
+		}
+		else
+		{
+			this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
+			this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
+		}
+		this.speed = speed;
 		this.animation_speed = animation_speed;
 	}
 	public Mob(float x, float y, float w, float h,float box2DWidth, float box2DHeight, World world, int hp,int atk,float speed,float animation_speed, short cBits, short mBits, short gIndex) {
 		super(x, y, w, h, box2DWidth, box2DHeight, BodyType.DynamicBody, "Box", world, cBits, mBits, gIndex);
-		this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
-		this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
-		this.speed = speed * Constants.DIFFICULTY_MULTIPLIER;
+		if(this instanceof Player)
+		{
+			this.hp = hp;
+			this.atk = atk ;
+			
+		}
+		else
+		{
+			this.hp = hp * Constants.DIFFICULTY_MULTIPLIER;
+			this.atk = atk * Constants.DIFFICULTY_MULTIPLIER;
+		}
+		this.speed = speed;
 		this.animation_speed = animation_speed;
 	}
 	
@@ -82,11 +100,11 @@ public class Mob extends Entity {
 		if(object instanceof Bullet)
 		{
 			//System.out.println("Hitted by bullet");
-			/*Bullet bullet = (Bullet) object;
-			Vector2 force = bullet.body.getLinearVelocity();
+			Bullet bullet = (Bullet) object;
+			/*Vector2 force = bullet.body.getLinearVelocity();
 			force.setLength(speed*5);
 			body.applyForce(force, this.body.getPosition(), true);*/
-			hp -= 10;
+			hp -= bullet.damage;
 			if(hp == 0)
 				remove = true;
 			
@@ -98,8 +116,8 @@ public class Mob extends Entity {
 			{
 				if(this instanceof Player)
 				{
-					hp -= 30;
-					if(hp == 0)
+					hp -= e.getAtk();
+					if(hp <= 0)
 						remove = true;
 					//GameOverScreen
 				}

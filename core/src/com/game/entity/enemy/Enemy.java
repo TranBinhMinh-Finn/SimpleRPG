@@ -161,7 +161,7 @@ public class Enemy extends Mob {
 			findPath();
 		else 
 		{
-			attackWaitTime -= del*2;
+			attackWaitTime -= del*5;
 			if(attackWaitTime > 0)
 			{
 				randomActionQuery(del);
